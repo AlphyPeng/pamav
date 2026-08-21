@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import UserFilter from "./components/UserFilter.vue";
 import UserTable from "./components/UserTable.vue";
@@ -53,5 +53,66 @@ const users = ref([]);
 
 const totalItems = ref(0);
 
+/*
+|--------------------------------------------------------------------------
+| Computed
+|--------------------------------------------------------------------------
+*/
+
+const totalPages = computed(() => {
+    return Math.ceil(totalItems.value / perPage.value);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Methods
+|--------------------------------------------------------------------------
+*/
+
+const getUsers = async () => {
+    try {
+        loading.value = true;
+
+        const response = await axios.get("/api/admin/users", {
+            params: {
+                search: search.value,
+                status: status.value,
+                page: page.value,
+                per_page: perPage.value,
+            },
+        });
+
+        users.value = response.data.data;
+        totalItems.value = response.data.total;
+
+    } catch (error) {
+        console.error("Failed to load users:", error);
+    } finally {
+        loading.value = false;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Watchers
+|--------------------------------------------------------------------------
+*/
+
+watch([search, status], () => {
+    page.value = 1;
+    getUsers();
+});
+
+watch(page, () => {
+    getUsers();
+});
+
+/*
+|--------------------------------------------------------------------------
+| Initial Load
+|--------------------------------------------------------------------------
+*/
+
+getUsers();
 </script>
 <style></style>

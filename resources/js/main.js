@@ -1,18 +1,21 @@
-import { createApp } from 'vue'
-import App from '@/App.vue'
-import { registerPlugins } from '@core/utils/plugins'
+import App from "@/App.vue";
+import { registerPlugins } from "@core/utils/plugins";
+import { createApp } from "vue";
+
+import axios from "axios";
+window.axios = axios;
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 // Styles
-import '@core-scss/template/index.scss'
-import '@layouts/styles/index.scss'
-import '@styles/styles.scss'
+import "@core-scss/template/index.scss";
+import "@layouts/styles/index.scss";
+import "@styles/styles.scss";
 
 // Create vue app
-const app = createApp(App)
-
+const app = createApp(App);
 
 // Register plugins
-registerPlugins(app)
+registerPlugins(app);
 
 // Mount vue app
-app.mount('#app')
+app.mount("#app");
