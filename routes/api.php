@@ -7,5 +7,5 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
+require __DIR__ . '/api/auth.php';
 require __DIR__ . '/api/admin.php';
