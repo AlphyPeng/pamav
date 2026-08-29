@@ -81,8 +81,12 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
+
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
 import logo from '@images/logo.svg?raw';
+
+const router = useRouter();
 
 const loading = ref(false);
 
@@ -103,6 +107,8 @@ const login = async () => {
       employee_id: form.value.employeeId,
       password: form.value.password,
     });
+
+    router.push("/dashboard");
 
     console.log("Login successful:", response.data);
 

@@ -16,14 +16,19 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = [
-            'employee_id'       => '018657',
-            'first_name'        => 'Alphy',
-            'last_name'         => 'Balatucan',
-            'middle_name'       => 'Mendoza',
-            'email'             => 'alphy.balatucan@gmail.com',
-            'password'          => Hash::make('alphy123')
-        ];
+        $commonPassword = Hash::make('password123'); // I-hash nang minsan lang para mabilis
+        $users = [];
+
+        for ($i = 1; $i <= 20; $i++) {
+            $users[] = [
+                'employee_id' => '018' . str_pad($i, 3, '0', STR_PAD_LEFT), // Generates 018001, 018002, etc.
+                'first_name'  => 'User' . $i,
+                'last_name'   => 'Test',
+                'middle_name' => 'Sample',
+                'email'       => "user{$i}@example.com",
+                'password'    => $commonPassword
+            ];
+        }
 
         DB::table('users')->insert($users);
     }

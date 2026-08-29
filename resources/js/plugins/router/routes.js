@@ -7,6 +7,7 @@ export const routes = [
       {
         path: "dashboard",
         component: () => import("@/pages/dashboard.vue"),
+        meta: { requiresAuth: true },
       },
       {
         path: "admin",
@@ -15,6 +16,13 @@ export const routes = [
             path: "users",
             name: "users.index",
             component: () => import("@/pages/Admin/User/Index.vue"),
+            meta: { requiresAuth: true },
+          },
+          {
+            path: "users/create",
+            name: "users.create",
+            component: () => import("@/pages/Admin/User/Create.vue"),
+            meta: { requiresAuth: true },
           },
         ],
       },
@@ -51,10 +59,12 @@ export const routes = [
       {
         path: "login",
         component: () => import("@/pages/login.vue"),
+        meta: { requiresGuest: true },
       },
       {
         path: "register",
         component: () => import("@/pages/register.vue"),
+        meta: { requiresGuest: true },
       },
       {
         path: "/:pathMatch(.*)*",

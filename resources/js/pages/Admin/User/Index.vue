@@ -8,7 +8,7 @@
                 </v-col>
 
                 <v-col cols="12" md="auto">
-                    <v-btn color="primary" prepend-icon="bx-user-plus">
+                    <v-btn color="primary" prepend-icon="bx-user-plus" @click="createUser">
                         Add User
                     </v-btn>
                 </v-col>
@@ -31,10 +31,21 @@
 </template>
 
 <script setup>
+import debounce from "lodash/debounce";
 import { computed, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import UserFilter from "./components/UserFilter.vue";
 import UserTable from "./components/UserTable.vue";
+
+/*
+|--------------------------------------------------------------------------
+| Router
+|--------------------------------------------------------------------------
+*/
+
+const route = useRoute();
+const router = useRouter();
 
 /*
 |--------------------------------------------------------------------------
@@ -42,11 +53,11 @@ import UserTable from "./components/UserTable.vue";
 |--------------------------------------------------------------------------
 */
 
-const search = ref("");
-const status = ref(null);
+const search = ref(route.query.search || "");
+const status = ref(route.query.status || null);
 
-const page = ref(1);
-const perPage = ref(10);
+const page = ref(parseInt(route.query.page) || 1);
+const perPage = ref(parseInt(route.query.per_page) || 10);
 
 const loading = ref(false);
 const users = ref([]);
@@ -69,9 +80,27 @@ const totalPages = computed(() => {
 |--------------------------------------------------------------------------
 */
 
+const createUser = () => {
+    router.push({
+        name: "users.create",
+    });
+};
+
+const syncToUrl = () => {
+    router.replace({
+        query: {
+            page: page.value,
+            per_page: perPage.value,
+            search: search.value || undefined,
+            status: status.value || undefined,
+        },
+    });
+};
+
 const getUsers = async () => {
     try {
         loading.value = true;
+        syncToUrl();
 
         const response = await axios.get("/api/admin/users", {
             params: {
@@ -92,6 +121,10 @@ const getUsers = async () => {
     }
 }
 
+const debouncedGetUsers = debounce(() => {
+    getUsers();
+}, 500);
+
 /*
 |--------------------------------------------------------------------------
 | Watchers
@@ -100,7 +133,7 @@ const getUsers = async () => {
 
 watch([search, status], () => {
     page.value = 1;
-    getUsers();
+    debouncedGetUsers();
 });
 
 watch(page, () => {
