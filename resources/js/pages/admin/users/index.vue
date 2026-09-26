@@ -5,6 +5,10 @@
             <v-row align="center" justify="space-between">
                 <v-col cols="12" md="6">
                     <div class="text-h4 font-weight-medium">Users</div>
+
+                    <div class="text-body-2 text-medium-emphasis mt-1">
+                        Control user access, update profiles, and manage system accounts.
+                    </div>
                 </v-col>
 
                 <v-col cols="12" md="auto">
@@ -116,6 +120,7 @@ const getUsers = async () => {
 
     } catch (error) {
         console.error("Failed to load users:", error);
+
     } finally {
         loading.value = false;
     }

@@ -93,6 +93,10 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       title: 'Users',
       to: { name: 'users.index' },
     }" />
+    <VerticalNavLink :item="{
+      title: 'Roles & Permissions',
+      to: { name: 'roles-permissions.index' },
+    }" />
   </VerticalNavGroup>
 
   <!-- Admin END -->

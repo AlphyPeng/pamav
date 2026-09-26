@@ -12,16 +12,26 @@ export const routes = [
       {
         path: "admin",
         children: [
+          // USERS
           {
             path: "users",
             name: "users.index",
-            component: () => import("@/pages/Admin/User/Index.vue"),
+            component: () => import("@/pages/admin/users/index.vue"),
             meta: { requiresAuth: true },
           },
           {
             path: "users/create",
             name: "users.create",
-            component: () => import("@/pages/Admin/User/Create.vue"),
+            component: () => import("@/pages/admin/users/create.vue"),
+            meta: { requiresAuth: true },
+          },
+
+          // ROLES & PERMISSIONS
+          {
+            path: "roles-permissions",
+            name: "roles-permissions.index",
+            component: () =>
+              import("@/pages/admin/roles-permissions/index.vue"),
             meta: { requiresAuth: true },
           },
         ],
