@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table-server :headers="headers" :items="users" :loading="loading" hover hide-default-footer>
+        <v-data-table :headers="headers" :items="users" :loading="loading" hover hide-default-footer>
             <!-- STATUS -->
             <template #item.status="{ item }">
                 <v-chip :color="getStatusColor(item.status)" size="small" variant="tonal">
@@ -28,7 +28,7 @@
                     No users found.
                 </div>
             </template>
-        </v-data-table-server>
+        </v-data-table>
     </div>
 </template>
 

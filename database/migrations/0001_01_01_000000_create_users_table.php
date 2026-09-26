@@ -24,7 +24,8 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('avatar')->nullable();
             $table->string('theme', 10)->default('light');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

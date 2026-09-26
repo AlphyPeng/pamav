@@ -30,8 +30,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Login successful.',
             'user'    => [
-                'employee_id' => $user->employee_id,
-                'name'        => $user->name,
+                'employee_id' => $user->employee_id
             ]
         ]);
     }
