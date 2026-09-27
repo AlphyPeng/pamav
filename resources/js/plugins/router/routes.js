@@ -34,6 +34,20 @@ export const routes = [
               import("@/pages/admin/roles-permissions/index.vue"),
             meta: { requiresAuth: true },
           },
+          {
+            path: "roles-permissions/roles/create",
+            name: "roles.create",
+            component: () =>
+              import("@/pages/admin/roles-permissions/create.vue"),
+            meta: { requiresAuth: true },
+          },
+          {
+            path: "roles-permissions/permissions/create",
+            name: "permissions.create",
+            component: () =>
+              import("@/pages/admin/roles-permissions/create.vue"),
+            meta: { requiresAuth: true },
+          },
         ],
       },
       {

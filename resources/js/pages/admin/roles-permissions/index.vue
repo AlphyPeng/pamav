@@ -10,6 +10,11 @@
                         Manage system roles and access control permissions.
                     </div>
                 </v-col>
+                <v-col cols="12" md="auto">
+                    <v-btn color="primary" :prepend-icon="buttonConfig.icon" @click="handleCreate(activeTab)">
+                        {{ buttonConfig.text }}
+                    </v-btn>
+                </v-col>
             </v-row>
 
             <!-- TABS -->
@@ -40,10 +45,67 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRoute, useRouter } from "vue-router";
 
 import PermissionTable from "./components/PermissionTable.vue";
 import RoleTable from "./components/RoleTable.vue";
 
-const activeTab = ref('roles')
+/*
+|--------------------------------------------------------------------------
+| Router
+|--------------------------------------------------------------------------
+*/
+
+const route = useRoute();
+const router = useRouter();
+
+/*
+|--------------------------------------------------------------------------
+| State
+|--------------------------------------------------------------------------
+*/
+
+const activeTab = ref('roles');
+
+/*
+|--------------------------------------------------------------------------
+| Computed
+|--------------------------------------------------------------------------
+*/
+
+const buttonConfig = computed(() => {
+    if (activeTab.value === 'roles') {
+        return {
+            text: 'Add Role',
+            icon: 'bx-shield-plus'
+        }
+    } else {
+        return {
+            text: 'Add Permission',
+            icon: 'bx-key'
+        };
+    }
+});
+
+/*
+|--------------------------------------------------------------------------
+| Methods
+|--------------------------------------------------------------------------
+*/
+
+const handleCreate = (value) => {
+    if (value === 'roles') {
+        router.push({
+            name: "roles.create",
+        });
+    } else {
+        router.push({
+            name: "permissions.create",
+        });
+    }
+};
+
+
+
 </script>
 <style></style>
