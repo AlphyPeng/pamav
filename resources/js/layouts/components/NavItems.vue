@@ -95,7 +95,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
     }" />
     <VerticalNavLink :item="{
       title: 'Roles & Permissions',
-      to: { name: 'roles-permissions.index' },
+      to: { name: 'roles-permissions.index', query: { tab: 'roles' } },
     }" />
   </VerticalNavGroup>
 

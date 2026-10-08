@@ -36,7 +36,7 @@
 
 <script setup>
 import debounce from "lodash/debounce";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import UserFilter from "./components/UserFilter.vue";
@@ -102,11 +102,11 @@ const syncToUrl = () => {
 };
 
 const getUsers = async () => {
+    loading.value = true;
     try {
-        loading.value = true;
         syncToUrl();
 
-        const response = await axios.get("/api/admin/users", {
+        const response = await axios.get('/api/admin/users', {
             params: {
                 search: search.value,
                 status: status.value,
@@ -150,7 +150,8 @@ watch(page, () => {
 | Initial Load
 |--------------------------------------------------------------------------
 */
-
-getUsers();
+onMounted(() => {
+    getUsers();
+})
 </script>
 <style></style>

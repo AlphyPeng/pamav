@@ -35,16 +35,14 @@
                 </v-window-item>
 
                 <v-window-item value="permissions">
-                    <PermissionTable />
+                    <PermissionTable :permissions="permissions" :loading="loading" />
                 </v-window-item>
-
             </v-window>
         </v-card>
     </v-container>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useRoute, useRouter } from "vue-router";
 
 import PermissionTable from "./components/PermissionTable.vue";
@@ -65,13 +63,26 @@ const router = useRouter();
 |--------------------------------------------------------------------------
 */
 
-const activeTab = ref('roles');
+const loading = ref(false);
+const roles = ref([])
+const permissions = ref([])
 
 /*
 |--------------------------------------------------------------------------
 | Computed
 |--------------------------------------------------------------------------
 */
+const activeTab = computed({
+    get() {
+        return route.query.tab === 'roles' ? 'roles' : 'permissions';
+    },
+    set(val) {
+        router.replace({
+            name: 'roles-permissions.index',
+            query: { ...route.query, tab: val }
+        });
+    }
+});
 
 const buttonConfig = computed(() => {
     if (activeTab.value === 'roles') {
@@ -105,7 +116,32 @@ const handleCreate = (value) => {
     }
 };
 
+const fetchData = async () => {
+    loading.value = true;
+    try {
+        if (activeTab.value === 'roles') {
+            const response = await axios.get('api/admin/permissions');
+            roles.value = response.data;
+        } else {
+            const response = await axios.get('/api/admin/permissions');
+            permissions.value = response.data;
+        }
 
+    } catch (error) {
+        console.error("Failed to load:", error);
 
+    } finally {
+        loading.value = false;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Initial Load
+|--------------------------------------------------------------------------
+*/
+onMounted(() => {
+    fetchData();
+})
 </script>
 <style></style>

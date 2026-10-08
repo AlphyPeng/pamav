@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table :headers="headers" :loading="loading" hover hide-default-footer>
+        <v-data-table :headers="headers" :items="permissions" :loading="loading" hover hide-default-footer>
             <!-- ACTIONS -->
             <template #item.actions="{ item }">
                 <div class="d-flex justify-center ga-1">
@@ -26,50 +26,41 @@
 </template>
 
 <script setup>
+defineProps({
+    permissions: {
+        type: Array,
+        default: () => [],
+    },
+
+    loading: {
+        type: Boolean,
+        default: false,
+    },
+})
+
 
 const headers = [
     {
-        title: "Employee Id",
-        key: "employee_id",
+        title: "Name",
+        key: "name",
         width: 120,
         align: "center",
         sortable: false,
     },
     {
-        title: "First Name",
-        key: "first_name",
+        title: "Date Created",
+        key: "created_at",
         width: 250,
         align: "center",
         sortable: false,
     },
     {
-        title: "Last Name",
-        key: "last_name",
+        title: "Date Updated",
+        key: "updated_at",
         width: 250,
         align: "center",
         sortable: false,
-    },
-    {
-        title: "Email",
-        key: "email",
-        width: 300,
-        align: "center",
-        sortable: false,
-    },
-    {
-        title: "Status",
-        key: "status",
-        width: 120,
-        align: "center",
-        sortable: false,
-    },
-    {
-        title: "Actions",
-        key: "actions",
-        width: 150,
-        align: "center",
-        sortable: false,
-    },
+    }
 ];
 </script>
 <style></style>

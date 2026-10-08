@@ -2,24 +2,12 @@
     <v-container fluid>
         <v-card class="pa-4">
             <!-- HEADER -->
-            <v-row align="center" justify="space-between">
-                <v-col cols="12" md="6">
+            <v-row align="center">
+                <v-col cols=" 12" md="6">
                     <div class="text-h4 font-weight-medium">Create {{ titleText }}</div>
 
                     <div class="text-body-2 text-medium-emphasis mt-1">
                         Fill out the form below to add a new {{ titleText.toLowerCase() }}.
-                    </div>
-                </v-col>
-
-                <v-col cols="12" md="auto">
-                    <div class="d-flex ga-3">
-                        <v-btn variant="tonal" color="grey" prepend-icon="bx bx-arrow-back" @click="goBack">
-                            Back
-                        </v-btn>
-
-                        <v-btn variant="flat" color="primary" prepend-icon="bx bx-check">
-                            Submit
-                        </v-btn>
                     </div>
                 </v-col>
             </v-row>
@@ -27,8 +15,8 @@
             <v-divider class="my-4" />
 
             <!-- FORM -->
-            <RoleForm v-if="isRole" />
-            <PermissionForm v-else />
+            <RoleForm v-if="isRole" @cancel="goBack" />
+            <PermissionForm v-else @cancel="goBack" />
         </v-card>
     </v-container>
 </template>
@@ -54,7 +42,6 @@ const router = useRouter();
 */
 
 const isRole = computed(() => route.name === 'roles.create');
-
 const titleText = computed(() => (isRole.value ? 'Role' : 'Permission'));
 
 /*
@@ -64,8 +51,11 @@ const titleText = computed(() => (isRole.value ? 'Role' : 'Permission'));
 */
 
 const goBack = () => {
-    router.push({ name: "roles-permissions.index" });
+    const tabQuery = isRole.value ? 'roles' : 'permissions';
+    router.push({ name: "roles-permissions.index", query: { tab: tabQuery } });
 };
+
+
 
 </script>
 

@@ -9,5 +9,8 @@ class RoleService
 {
     public function getPaginatedRoles(array $filters, int $perPage) {}
 
-    public function createRole() {}
+    public function createRole(): Role
+    {
+        return Role::create([]);
+    }
 }
