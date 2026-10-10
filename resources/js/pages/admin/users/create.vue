@@ -10,23 +10,11 @@
                         Fill out the form below to add a new user.
                     </div>
                 </v-col>
-
-                <v-col cols="12" md="auto">
-                    <div class="d-flex ga-3">
-                        <v-btn variant="tonal" color="grey" prepend-icon="bx bx-arrow-back" @click="goBack">
-                            Back
-                        </v-btn>
-
-                        <v-btn variant="flat" color="primary" prepend-icon="bx bx-check">
-                            Submit
-                        </v-btn>
-                    </div>
-                </v-col>
             </v-row>
 
             <v-divider class="my-4" />
 
-            <UserForm />
+            <UserForm @cancel="goBack" />
         </v-card>
     </v-container>
 </template>

@@ -106,47 +106,21 @@ const currencies = [
       <VCard title="Account Details">
         <VCardText class="d-flex">
           <!-- 👉 Avatar -->
-          <VAvatar
-            rounded="lg"
-            size="100"
-            class="me-6"
-            :image="accountDataLocal.avatarImg"
-          />
+          <VAvatar rounded="lg" size="100" class="me-6" :image="accountDataLocal.avatarImg" />
 
           <!-- 👉 Upload Photo -->
           <form class="d-flex flex-column justify-center gap-5">
             <div class="d-flex flex-wrap gap-2">
-              <VBtn
-                color="primary"
-                @click="refInputEl?.click()"
-              >
-                <VIcon
-                  icon="bx-cloud-upload"
-                  class="d-sm-none"
-                />
+              <VBtn color="primary" @click="refInputEl?.click()">
+                <VIcon icon="bx-cloud-upload" class="d-sm-none" />
                 <span class="d-none d-sm-block">Upload new photo</span>
               </VBtn>
 
-              <input
-                ref="refInputEl"
-                type="file"
-                name="file"
-                accept=".jpeg,.png,.jpg,GIF"
-                hidden
-                @input="changeAvatar"
-              >
+              <input ref="refInputEl" type="file" name="file" accept=".jpeg,.png,.jpg,GIF" hidden @input="changeAvatar">
 
-              <VBtn
-                type="reset"
-                color="error"
-                variant="tonal"
-                @click="resetAvatar"
-              >
+              <VBtn type="reset" color="error" variant="tonal" @click="resetAvatar">
                 <span class="d-none d-sm-block">Reset</span>
-                <VIcon
-                  icon="bx-refresh"
-                  class="d-sm-none"
-                />
+                <VIcon icon="bx-refresh" class="d-sm-none" />
               </VBtn>
             </div>
 
@@ -163,169 +137,76 @@ const currencies = [
           <VForm class="mt-6">
             <VRow>
               <!-- 👉 First Name -->
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="accountDataLocal.firstName"
-                  placeholder="John"
-                  label="First Name"
-                />
+              <VCol md="6" cols="12">
+                <VTextField v-model="accountDataLocal.firstName" placeholder="John" label="First Name" />
               </VCol>
 
               <!-- 👉 Last Name -->
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="accountDataLocal.lastName"
-                  placeholder="Doe"
-                  label="Last Name"
-                />
+              <VCol md="6" cols="12">
+                <VTextField v-model="accountDataLocal.lastName" placeholder="Doe" label="Last Name" />
               </VCol>
 
               <!-- 👉 Email -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="accountDataLocal.email"
-                  label="E-mail"
-                  placeholder="johndoe@gmail.com"
-                  type="email"
-                />
+              <VCol cols="12" md="6">
+                <VTextField v-model="accountDataLocal.email" label="E-mail" placeholder="johndoe@gmail.com"
+                  type="email" />
               </VCol>
 
               <!-- 👉 Organization -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="accountDataLocal.org"
-                  label="Organization"
-                  placeholder="ThemeSelection"
-                />
+              <VCol cols="12" md="6">
+                <VTextField v-model="accountDataLocal.org" label="Organization" placeholder="ThemeSelection" />
               </VCol>
 
               <!-- 👉 Phone -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="accountDataLocal.phone"
-                  label="Phone Number"
-                  placeholder="+1 (917) 543-9876"
-                />
+              <VCol cols="12" md="6">
+                <VTextField v-model="accountDataLocal.phone" label="Phone Number" placeholder="+1 (917) 543-9876" />
               </VCol>
 
               <!-- 👉 Address -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="accountDataLocal.address"
-                  label="Address"
-                  placeholder="123 Main St, New York, NY 10001"
-                />
+              <VCol cols="12" md="6">
+                <VTextField v-model="accountDataLocal.address" label="Address"
+                  placeholder="123 Main St, New York, NY 10001" />
               </VCol>
 
               <!-- 👉 State -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="accountDataLocal.state"
-                  label="State"
-                  placeholder="New York"
-                />
+              <VCol cols="12" md="6">
+                <VTextField v-model="accountDataLocal.state" label="State" placeholder="New York" />
               </VCol>
 
               <!-- 👉 Zip Code -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="accountDataLocal.zip"
-                  label="Zip Code"
-                  placeholder="10001"
-                />
+              <VCol cols="12" md="6">
+                <VTextField v-model="accountDataLocal.zip" label="Zip Code" placeholder="10001" />
               </VCol>
 
               <!-- 👉 Country -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VSelect
-                  v-model="accountDataLocal.country"
-                  label="Country"
-                  :items="['USA', 'Canada', 'UK', 'India', 'Australia']"
-                  placeholder="Select Country"
-                />
+              <VCol cols="12" md="6">
+                <VSelect v-model="accountDataLocal.country" label="Country"
+                  :items="['USA', 'Canada', 'UK', 'India', 'Australia']" placeholder="Select Country" />
               </VCol>
 
               <!-- 👉 Language -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VSelect
-                  v-model="accountDataLocal.language"
-                  label="Language"
-                  placeholder="Select Language"
-                  :items="['English', 'Spanish', 'Arabic', 'Hindi', 'Urdu']"
-                />
+              <VCol cols="12" md="6">
+                <VSelect v-model="accountDataLocal.language" label="Language" placeholder="Select Language"
+                  :items="['English', 'Spanish', 'Arabic', 'Hindi', 'Urdu']" />
               </VCol>
 
               <!-- 👉 Timezone -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VSelect
-                  v-model="accountDataLocal.timezone"
-                  label="Timezone"
-                  placeholder="Select Timezone"
-                  :items="timezones"
-                  :menu-props="{ maxHeight: 200 }"
-                />
+              <VCol cols="12" md="6">
+                <VSelect v-model="accountDataLocal.timezone" label="Timezone" placeholder="Select Timezone"
+                  :items="timezones" :menu-props="{ maxHeight: 200 }" />
               </VCol>
 
               <!-- 👉 Currency -->
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VSelect
-                  v-model="accountDataLocal.currency"
-                  label="Currency"
-                  placeholder="Select Currency"
-                  :items="currencies"
-                  :menu-props="{ maxHeight: 200 }"
-                />
+              <VCol cols="12" md="6">
+                <VSelect v-model="accountDataLocal.currency" label="Currency" placeholder="Select Currency"
+                  :items="currencies" :menu-props="{ maxHeight: 200 }" />
               </VCol>
 
               <!-- 👉 Form Actions -->
-              <VCol
-                cols="12"
-                class="d-flex flex-wrap gap-4"
-              >
+              <VCol cols="12" class="d-flex flex-wrap gap-4">
                 <VBtn>Save changes</VBtn>
 
-                <VBtn
-                  color="secondary"
-                  variant="tonal"
-                  type="reset"
-                  @click.prevent="resetForm"
-                >
+                <VBtn color="secondary" variant="tonal" type="reset" @click.prevent="resetForm">
                   Reset
                 </VBtn>
               </VCol>
@@ -340,17 +221,10 @@ const currencies = [
       <VCard title="Deactivate Account">
         <VCardText>
           <div>
-            <VCheckbox
-              v-model="isAccountDeactivated"
-              label="I confirm my account deactivation"
-            />
+            <VCheckbox v-model="isAccountDeactivated" label="I confirm my account deactivation" />
           </div>
 
-          <VBtn
-            :disabled="!isAccountDeactivated"
-            color="error"
-            class="mt-3"
-          >
+          <VBtn :disabled="!isAccountDeactivated" color="error" class="mt-3">
             Deactivate Account
           </VBtn>
         </VCardText>

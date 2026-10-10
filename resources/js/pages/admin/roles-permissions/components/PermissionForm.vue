@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { defineEmits, reactive } from 'vue';
 
 const emit = defineEmits(['cancel']);
 
@@ -36,7 +36,6 @@ const errors = reactive({
 });
 
 const handleSubmit = async () => {
-
     loading.value = true;
     errors.name = [];
 

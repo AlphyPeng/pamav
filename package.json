@@ -16,6 +16,7 @@
     "@vueuse/math": "^10.11.1",
     "apexcharts": "3.49.2",
     "axios": "^1.19.0",
+    "dayjs": "^1.11.23",
     "pinia": "^2.3.0",
     "prismjs": "^1.29.0",
     "roboto-fontface": "^0.10.0",

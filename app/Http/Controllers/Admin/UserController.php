@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreUserRequest;
 use App\Services\Admin\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Exception;
 
 class UserController extends Controller
 {
@@ -22,14 +24,11 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-    public function create()
+    public function store(StoreUserRequest $request)
     {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
+        try {
+        } catch (Exception $e) {
+        }
     }
 
     public function show(string $id)

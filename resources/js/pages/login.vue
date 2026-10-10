@@ -1,4 +1,8 @@
 <template>
+  <v-overlay :model-value="loading" class="align-center justify-center">
+    <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
+  </v-overlay>
+
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
     <div class="position-relative my-sm-16">
       <!-- 👉 Auth Card -->
@@ -98,9 +102,9 @@ const form = ref({
 const isPasswordVisible = ref(false)
 
 const login = async () => {
-  try {
-    loading.value = true;
+  loading.value = true;
 
+  try {
     await axios.get("/sanctum/csrf-cookie");
 
     const response = await axios.post("/api/login", {

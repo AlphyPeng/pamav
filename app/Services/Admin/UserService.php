@@ -37,4 +37,6 @@ class UserService
             ->latest('created_at')
             ->paginate($perPage);
     }
+
+    public function createUser() {}
 }
