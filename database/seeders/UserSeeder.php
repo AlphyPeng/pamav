@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         $commonPassword = Hash::make('password123');
         $users = [];
 
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $users[] = [
                 'employee_id' => '018' . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'first_name'  => 'User' . $i,

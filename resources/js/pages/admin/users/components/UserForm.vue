@@ -1,10 +1,10 @@
 <template>
-    <v-form>
+    <v-form @submit.prevent="handleSubmit">
         <v-row>
             <v-col cols="12" class="d-flex">
                 <!-- IMAGE PREVIEW -->
                 <v-avatar rounded="lg" size="100" class="me-6 border-sm">
-                    <v-img v-if="accountDataLocal.avatarImg" :src="accountDataLocal.avatarImg" cover />
+                    <v-img v-if="form.avatar.avatar" :src="form.avatar" cover />
                     <v-icon v-else icon="bx-user" size="80" class="text-disabled" />
                 </v-avatar>
 
@@ -35,34 +35,41 @@
             </v-col>
 
             <v-col md="4" cols="12">
-                <v-text-field>
+                <v-text-field v-model="form.first_name">
                     <template #label>
                         First Name <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field>
+                <v-text-field v-model="form.middle_name">
                     <template #label>
                         Middle Name <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field>
+                <v-text-field v-model="form.last_name">
                     <template #label>
                         Last Name <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
-            <v-col md="6" cols="12">
-                <v-text-field>
+            <v-col md="4" cols="12">
+                <v-text-field v-model="form.employee_id">
                     <template #label>
                         Employee ID <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
-            <v-col md="6" cols="12">
+            <v-col md="4" cols="12">
+                <v-text-field type="password" v-model="form.password">
+                    <template #label>
+                        Password <span class="text-error">*</span>
+                    </template>
+                </v-text-field>
+            </v-col>
+            <v-col md="4" cols="12">
                 <v-text-field>
                     <template #label>
                         Role <span class="text-error">*</span>
@@ -79,33 +86,33 @@
             </v-col>
 
             <v-col md="6" cols="12">
-                <v-text-field>
+                <v-text-field v-model="form.email">
                     <template #label>
                         Email Address <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="6" cols="12">
-                <v-text-field>
+                <v-text-field v-model="form.contact_number" prefix="+63" maxlength="10">
                     <template #label>
                         Contact Number <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field label="Street / House No." />
+                <v-text-field label="Street / House No." v-model="form.street" />
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field label="Barangay" />
+                <v-text-field label="Barangay" v-model="form.barangay" />
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field label="City / Municipality" />
+                <v-text-field label="City / Municipality" v-model="form.city" />
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field label="Province" />
+                <v-text-field label="Province" v-model="form.province" />
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field label="ZIP Code" />
+                <v-text-field label="ZIP Code" v-model="form.zip" />
             </v-col>
         </v-row>
 
@@ -122,30 +129,30 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
+import { defineEmits, ref } from 'vue';
 
 const emit = defineEmits(['cancel']);
 
 const loading = ref(false);
 
-const form = {
-    avatarImg: '',
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    employeeId: '',
+const form = ref({
+    avatar: '',
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    employee_id: '',
+    password: '',
     role: '',
     email: '',
-    phone: '',
+    contact_number: '',
     street: '',
     barangay: '',
     city: '',
     province: '',
     zip: '',
-}
+});
 
 const refInputEl = ref()
-const accountDataLocal = ref(structuredClone(form))
 
 const changeAvatar = event => {
     const { files } = event.target
@@ -154,9 +161,24 @@ const changeAvatar = event => {
         fileReader.readAsDataURL(files[0])
         fileReader.onload = () => {
             if (typeof fileReader.result === 'string') {
-                accountDataLocal.value.avatarImg = fileReader.result
+                form.value.avatar = fileReader.result
             }
         }
+    }
+}
+
+const handleSubmit = async () => {
+    loading.value = true;
+
+    try {
+        await axios.post('/api/admin/users', form.value)
+
+    } catch (error) {
+        if (error.response?.status === 422) {
+            errors.name = error.response.data.errors.name || [];
+        }
+    } finally {
+        loading.value = false;
     }
 }
 </script>

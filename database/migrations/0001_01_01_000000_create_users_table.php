@@ -18,6 +18,12 @@ return new class extends Migration
             $table->string('last_name', 100);
             $table->string('middle_name', 100)->nullable();
             $table->string('email')->unique();
+            $table->string('contact_number', 15)->nullable();
+            $table->string('street', 255)->nullable();
+            $table->string('barangay', 100)->nullable();
+            $table->string('city', 100)->nullable();
+            $table->string('province', 100)->nullable();
+            $table->string('zip', 10)->nullable();
             $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

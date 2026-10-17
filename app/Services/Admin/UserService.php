@@ -4,6 +4,8 @@ namespace App\Services\Admin;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
@@ -38,5 +40,24 @@ class UserService
             ->paginate($perPage);
     }
 
-    public function createUser() {}
+    public function createUser(array $data): User
+    {
+        return DB::transaction(function () use ($data) {
+            return User::create([
+                'employee_id'    => $data['employee_id'],
+                'first_name'     => $data['first_name'],
+                'middle_name'    => $data['middle_name'],
+                'last_name'      => $data['last_name'],
+                'email'          => $data['email'],
+                'contact_number' => '+63' . $data['contact_number'],
+                'street'         => $data['street'],
+                'barangay'       => $data['barangay'],
+                'city'           => $data['city'],
+                'province'       => $data['province'],
+                'zip'            => $data['zip'],
+                'password'       => Hash::make($data['password']),
+                'avatar'         => null
+            ]);
+        });
+    }
 }
