@@ -4,7 +4,7 @@
             <v-col cols="12" class="d-flex">
                 <!-- IMAGE PREVIEW -->
                 <v-avatar rounded="lg" size="100" class="me-6 border-sm">
-                    <v-img v-if="form.avatar.avatar" :src="form.avatar" cover />
+                    <v-img v-if="avatarPreview" :src="avatarPreview" cover />
                     <v-icon v-else icon="bx-user" size="80" class="text-disabled" />
                 </v-avatar>
 
@@ -16,7 +16,7 @@
                             <span class="d-none d-sm-block">Upload new photo</span>
                         </v-btn>
 
-                        <input ref="refInputEl" type="file" name="file" accept=".jpeg,.png,.jpg" hidden
+                        <input ref="refInputEl" type="file" name="file" accept=".jpeg, .png, .jpg" hidden
                             @input="changeAvatar" />
                     </div>
 
@@ -152,16 +152,19 @@ const form = ref({
     zip: '',
 });
 
-const refInputEl = ref()
+const refInputEl = ref();
+const avatarPreview = ref(null);
 
 const changeAvatar = event => {
     const { files } = event.target
     if (files && files.length) {
+        form.value.avatar = files[0]
+
         const fileReader = new FileReader()
         fileReader.readAsDataURL(files[0])
         fileReader.onload = () => {
             if (typeof fileReader.result === 'string') {
-                form.value.avatar = fileReader.result
+                avatarPreview.value = fileReader.result
             }
         }
     }
@@ -171,7 +174,19 @@ const handleSubmit = async () => {
     loading.value = true;
 
     try {
-        await axios.post('/api/admin/users', form.value)
+        const formData = new FormData();
+
+        for (const key in form.value) {
+            if (form.value[key] !== null && form.value[key] !== '') {
+                formData.append(key, form.value[key]);
+            }
+        }
+
+        await axios.post('/api/admin/users', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
 
     } catch (error) {
         if (error.response?.status === 422) {

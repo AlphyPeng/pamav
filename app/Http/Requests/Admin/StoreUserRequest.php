@@ -34,7 +34,7 @@ class StoreUserRequest extends FormRequest
             'province'       => ['nullable', 'string', 'max:100'],
             'zip'            => ['nullable', 'string', 'max:10'],
             'password'       => ['required', 'string', 'min:8'],
-            'avatar'         => ['required', 'string']
+            'avatar'         => ['nullable']
         ];
     }
 }
