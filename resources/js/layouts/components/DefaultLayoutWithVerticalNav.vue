@@ -13,18 +13,12 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">
         <!-- 👉 Vertical nav toggle in overlay mode -->
-        <IconBtn
-          class="ms-n3 d-lg-none"
-          @click="toggleVerticalOverlayNavActive(true)"
-        >
+        <IconBtn class="ms-n3 d-lg-none" @click="toggleVerticalOverlayNavActive(true)">
           <VIcon icon="bx-menu" />
         </IconBtn>
 
         <!-- 👉 Search -->
-        <div
-          class="d-flex align-center cursor-pointer ms-lg-n3"
-          style="user-select: none;"
-        >
+        <div class="d-flex align-center cursor-pointer ms-lg-n3" style="user-select: none;">
           <!-- 👉 Search Trigger button -->
           <IconBtn>
             <VIcon icon="bx-search" />
@@ -38,11 +32,8 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 
         <VSpacer />
 
-        <IconBtn
-          href="https://github.com/themeselection/sneat-vuetify-vuejs-laravel-admin-template-free"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <IconBtn href="https://github.com/themeselection/sneat-vuetify-vuejs-laravel-admin-template-free"
+          target="_blank" rel="noopener noreferrer">
           <VIcon icon="bxl-github" />
         </IconBtn>
 
@@ -57,15 +48,9 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
     </template>
 
     <template #vertical-nav-header="{ toggleIsOverlayNavActive }">
-      <RouterLink
-        to="/"
-        class="app-logo app-title-wrapper"
-      >
+      <RouterLink to="/" class="app-logo app-title-wrapper">
         <!-- eslint-disable vue/no-v-html -->
-        <div
-          class="d-flex"
-          v-html="logo"
-        />
+        <div class="d-flex" v-html="logo" />
         <!-- eslint-enable -->
 
         <h1 class="app-logo-title">
@@ -73,10 +58,7 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
         </h1>
       </RouterLink>
 
-      <IconBtn
-        class="d-block d-lg-none"
-        @click="toggleIsOverlayNavActive(false)"
-      >
+      <IconBtn class="d-block d-lg-none" @click="toggleIsOverlayNavActive(false)">
         <VIcon icon="bx-x" />
       </IconBtn>
     </template>

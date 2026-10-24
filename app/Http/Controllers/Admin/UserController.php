@@ -36,8 +36,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Failed to create user.',
-                'error'   => $e->getMessage(),
+                'message' => 'Failed to create user: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -57,8 +56,20 @@ class UserController extends Controller
         //
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        try {
+            $this->userService->deleteUser($ids);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User deleted successfully.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete user: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

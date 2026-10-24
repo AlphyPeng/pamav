@@ -23,6 +23,7 @@ class UserService
                 'last_name',
                 'email',
                 'status',
+                'avatar'
             ])
             // SEARCH
             ->when($search, function ($query) use ($search) {
@@ -65,6 +66,19 @@ class UserService
                 'password'       => Hash::make($data['password']),
                 'avatar'         => $avatarPath ?? null
             ]);
+        });
+    }
+
+    public function deleteUser($id): bool
+    {
+        return DB::transaction(function () use ($id) {
+            $user = User::findOrFail($id);
+
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            return $user->delete();
         });
     }
 }

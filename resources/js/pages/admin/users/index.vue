@@ -24,7 +24,7 @@
             <v-divider class="mb-4" />
 
             <!-- TABLE -->
-            <UserTable :users="users" :loading="loading" />
+            <UserTable :users="users" :loading="loading" @fetch-users="fetchUsers" />
 
             <!-- PAGINATION -->
             <div class="d-flex justify-end mt-4">
@@ -101,7 +101,7 @@ const syncToUrl = () => {
     });
 };
 
-const getUsers = async () => {
+const fetchUsers = async () => {
     loading.value = true;
     try {
         syncToUrl();
@@ -127,7 +127,7 @@ const getUsers = async () => {
 }
 
 const debouncedGetUsers = debounce(() => {
-    getUsers();
+    fetchUsers();
 }, 500);
 
 /*
@@ -142,7 +142,7 @@ watch([search, status], () => {
 });
 
 watch(page, () => {
-    getUsers();
+    fetchUsers();
 });
 
 /*
@@ -151,7 +151,7 @@ watch(page, () => {
 |--------------------------------------------------------------------------
 */
 onMounted(() => {
-    getUsers();
+    fetchUsers();
 })
 </script>
 <style></style>

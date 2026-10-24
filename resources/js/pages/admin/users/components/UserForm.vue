@@ -35,7 +35,7 @@
             </v-col>
 
             <v-col md="4" cols="12">
-                <v-text-field v-model="form.first_name">
+                <v-text-field v-model="form.first_name" :error-messages="errors.first_name">
                     <template #label>
                         First Name <span class="text-error">*</span>
                     </template>
@@ -44,26 +44,26 @@
             <v-col md="4" cols="12">
                 <v-text-field v-model="form.middle_name">
                     <template #label>
-                        Middle Name <span class="text-error">*</span>
+                        Middle Name <span class="text-error" :error-messages="errors.middle_name">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field v-model="form.last_name">
+                <v-text-field v-model="form.last_name" :error-messages="errors.last_name">
                     <template #label>
                         Last Name <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field v-model="form.employee_id">
+                <v-text-field v-model="form.employee_id" :error-messages="errors.employee_id">
                     <template #label>
                         Employee ID <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field type="password" v-model="form.password">
+                <v-text-field type="password" v-model="form.password" :error-messages="errors.password">
                     <template #label>
                         Password <span class="text-error">*</span>
                     </template>
@@ -86,14 +86,15 @@
             </v-col>
 
             <v-col md="6" cols="12">
-                <v-text-field v-model="form.email">
+                <v-text-field v-model="form.email" :error-messages="errors.email">
                     <template #label>
                         Email Address <span class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="6" cols="12">
-                <v-text-field v-model="form.contact_number" prefix="+63" maxlength="10">
+                <v-text-field v-model="form.contact_number" prefix="+63" maxlength="10"
+                    :error-messages="errors.contact_number">
                     <template #label>
                         Contact Number <span class="text-error">*</span>
                     </template>
@@ -129,9 +130,12 @@
 </template>
 
 <script setup>
+import { useSnackbarStore } from '@/stores/snackbar';
 import { defineEmits, ref } from 'vue';
 
 const emit = defineEmits(['cancel']);
+
+const snackbar = useSnackbarStore();
 
 const loading = ref(false);
 
@@ -151,6 +155,8 @@ const form = ref({
     province: '',
     zip: '',
 });
+
+const errors = ref({});
 
 const refInputEl = ref();
 const avatarPreview = ref(null);
@@ -172,6 +178,7 @@ const changeAvatar = event => {
 
 const handleSubmit = async () => {
     loading.value = true;
+    errors.value = {};
 
     try {
         const formData = new FormData();
@@ -188,10 +195,18 @@ const handleSubmit = async () => {
             }
         })
 
+        snackbar.triggerSnackbar('User successfully created!', 'success')
+
     } catch (error) {
         if (error.response?.status === 422) {
-            errors.name = error.response.data.errors.name || [];
+            errors.value = error.response.data.errors || {};
+        } else {
+            console.error('An unexpected error occurred:', error);
+
+            const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+            snackbar.triggerSnackbar(errorMessage, 'error');
         }
+
     } finally {
         loading.value = false;
     }
