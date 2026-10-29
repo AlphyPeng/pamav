@@ -69,11 +69,9 @@ class UserService
         });
     }
 
-    public function deleteUser($id): bool
+    public function deleteUser(User $user): bool
     {
-        return DB::transaction(function () use ($id) {
-            $user = User::findOrFail($id);
-
+        return DB::transaction(function () use ($user) {
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }

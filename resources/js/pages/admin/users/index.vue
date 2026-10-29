@@ -35,12 +35,15 @@
 </template>
 
 <script setup>
+import { useSnackbarStore } from '@/stores/snackbar';
 import debounce from "lodash/debounce";
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import UserFilter from "./components/UserFilter.vue";
 import UserTable from "./components/UserTable.vue";
+
+const snackbar = useSnackbarStore();
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +123,9 @@ const fetchUsers = async () => {
 
     } catch (error) {
         console.error("Failed to load users:", error);
+
+        const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+        snackbar.triggerSnackbar(errorMessage, 'error');
 
     } finally {
         loading.value = false;

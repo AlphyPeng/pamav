@@ -9,8 +9,8 @@
                 </v-avatar>
 
                 <!-- UPLOAD PHOTO-->
-                <div class="d-flex flex-column justify-center gap-5">
-                    <div class="d-flex flex-wrap gap-2">
+                <div class="d-flex flex-column justify-center gap-2">
+                    <div class="d-flex flex-wrap">
                         <v-btn color="primary" @click="refInputEl?.click()" prepend-icon="bx-upload">
                             <v-icon icon="bx-cloud-upload" class="d-sm-none" />
                             <span class="d-none d-sm-block">Upload new photo</span>
@@ -19,10 +19,12 @@
                         <input ref="refInputEl" type="file" name="file" accept=".jpeg, .png, .jpg" hidden
                             @input="changeAvatar" />
                     </div>
-
                     <p class="text-body-1 mb-0">
                         Allowed JPG, JPEG or PNG. Max size of 2 MB
                     </p>
+                    <span v-if="errors.avatar" class="text-error text-sm">
+                        {{ errors.avatar[0] }}
+                    </span>
                 </div>
             </v-col>
         </v-row>
@@ -42,11 +44,7 @@
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
-                <v-text-field v-model="form.middle_name">
-                    <template #label>
-                        Middle Name <span class="text-error" :error-messages="errors.middle_name">*</span>
-                    </template>
-                </v-text-field>
+                <v-text-field label="Middle Name" v-model="form.middle_name" :error-messages="errors.middle_name" />
             </v-col>
             <v-col md="4" cols="12">
                 <v-text-field v-model="form.last_name" :error-messages="errors.last_name">

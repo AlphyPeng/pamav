@@ -11,8 +11,9 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/{user}', [UserController::class, 'show']);
     Route::post('/users', [UserController::class, 'store']);
-    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::delete('/users/{user}', [UserController::class, 'destroy']);
 
     /*
     |--------------------------------------------------------------------------

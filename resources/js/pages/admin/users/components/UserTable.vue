@@ -6,7 +6,7 @@
                 <v-avatar size="36" class="my-1">
                     <v-img v-if="item.avatar" :src="`/storage/${item.avatar}`" alt="User Avatar" cover />
 
-                    <v-icon v-else icon="mdi-account" color="grey-darken-1"></v-icon>
+                    <v-icon v-else icon="bx-user" color="grey-darken-1"></v-icon>
                 </v-avatar>
             </template>
 

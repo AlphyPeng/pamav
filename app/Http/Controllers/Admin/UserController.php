@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Services\Admin\UserService;
@@ -41,9 +42,12 @@ class UserController extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data'    => $user
+        ]);
     }
 
     public function edit(string $id)
@@ -56,10 +60,10 @@ class UserController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
         try {
-            $this->userService->deleteUser($ids);
+            $this->userService->deleteUser($user);
 
             return response()->json([
                 'status' => 'success',
