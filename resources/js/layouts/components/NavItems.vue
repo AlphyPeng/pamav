@@ -98,40 +98,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       to: { name: 'roles-permissions.index', query: { tab: 'roles' } },
     }" />
   </VerticalNavGroup>
-
   <!-- Admin END -->
-  <VerticalNavLink :item="{
-    title: 'Email',
-    icon: 'bx-envelope',
-    href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/apps/email',
-    target: '_blank',
-    badgeContent: 'Pro',
-    badgeClass: 'bg-light-primary text-primary',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Chat',
-    icon: 'bx-chat',
-    href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/apps/chat',
-    target: '_blank',
-    badgeContent: 'Pro',
-    badgeClass: 'bg-light-primary text-primary',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Calendar',
-    icon: 'bx-calendar',
-    href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/apps/calendar',
-    target: '_blank',
-    badgeContent: 'Pro',
-    badgeClass: 'bg-light-primary text-primary',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Kanban',
-    icon: 'bx-grid',
-    href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/apps/kanban',
-    target: '_blank',
-    badgeContent: 'Pro',
-    badgeClass: 'bg-light-primary text-primary',
-  }" />
 
   <VerticalNavLink :item="{
     title: 'Account Settings',
@@ -185,49 +152,8 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
     to: '/form-layouts',
   }" />
   <VerticalNavLink :item="{
-    title: 'Form Validation',
-    icon: 'bx-check-circle',
-    href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/forms/form-validation',
-    target: '_blank',
-    badgeContent: 'Pro',
-    badgeClass: 'bg-light-primary text-primary',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Form Wizard',
-    icon: 'bx-align-middle',
-    href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/forms/form-wizard-numbered',
-    target: '_blank',
-    badgeContent: 'Pro',
-    badgeClass: 'bg-light-primary text-primary',
-  }" />
-  <VerticalNavLink :item="{
     title: 'Tables',
     icon: 'bx-table',
     to: '/tables',
-  }" />
-
-  <!-- 👉 Others -->
-  <VerticalNavSectionTitle :item="{
-    heading: 'Others',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Access Control',
-    icon: 'bx-command',
-    href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-laravel-admin-template/demo-1/access-control',
-    target: '_blank',
-    badgeContent: 'Pro',
-    badgeClass: 'bg-light-primary text-primary',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Documentation',
-    icon: 'bx-file',
-    href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/documentation/guide/laravel-integration/folder-structure.html',
-    target: '_blank',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Raise Support',
-    href: 'https://github.com/themeselection/sneat-vuetify-vuejs-laravel-admin-template-free/issues',
-    icon: 'bx-phone',
-    target: '_blank',
   }" />
 </template>

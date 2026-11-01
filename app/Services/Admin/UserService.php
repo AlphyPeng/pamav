@@ -30,6 +30,7 @@ class UserService
                 $query->where(function ($q) use ($search) {
                     $q->where('employee_id', 'like', $search . '%')
                         ->orWhere('first_name', 'like', $search . '%')
+                        ->orWhere('middle_name', 'like', $search . '%')
                         ->orWhere('last_name', 'like', $search . '%')
                         ->orWhere('email', 'like', $search . '%');
                 });

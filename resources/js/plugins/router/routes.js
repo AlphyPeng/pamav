@@ -25,6 +25,18 @@ export const routes = [
             component: () => import("@/pages/admin/users/create.vue"),
             meta: { requiresAuth: true },
           },
+          {
+            path: "users/:id",
+            name: "users.view",
+            component: () => import("@/pages/admin/users/show.vue"),
+            meta: { requiresAuth: true },
+          },
+          {
+            path: "users/:id/edit",
+            name: "users.edit",
+            component: () => import("@/pages/admin/users/edit.vue"),
+            meta: { requiresAuth: true },
+          },
 
           // ROLES & PERMISSIONS
           {

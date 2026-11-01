@@ -33,6 +33,9 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
+            $table->index('first_name');
+            $table->index('last_name');
+            $table->index('middle_name');
             $table->index('status');
             $table->index('created_at');
         });

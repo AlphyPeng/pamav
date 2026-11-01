@@ -14,19 +14,49 @@
 
             <v-divider class="my-4" />
 
-            <UserForm @cancel="goBack" />
+            <UserForm mode="create" :loading="loading" :errors="errors" @submit="handleCreate" @cancel="goBack" />
         </v-card>
     </v-container>
 </template>
 
 <script setup>
+import { useSnackbarStore } from '@/stores/snackbar';
 import { useRouter } from "vue-router";
 import UserForm from "./components/UserForm.vue";
 
 const router = useRouter();
+const loading = ref(false);
+const errors = ref({});
 
 const goBack = () => {
     router.push({ name: "users.index" });
+};
+
+const snackbar = useSnackbarStore();
+
+const handleCreate = async (formData) => {
+    loading.value = true;
+    errors.value = {};
+
+    try {
+        await axios.post('/api/admin/users', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        // router.push({ name: 'users.index' });
+    } catch (error) {
+        if (error.response?.status === 422) {
+            errors.value = error.response.data.errors || {};
+        } else {
+            console.error('An unexpected error occurred:', error);
+
+            const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+            snackbar.triggerSnackbar(errorMessage, 'error');
+        }
+
+    } finally {
+        loading.value = false;
+    }
 };
 </script>
 

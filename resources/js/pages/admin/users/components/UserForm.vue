@@ -9,7 +9,7 @@
                 </v-avatar>
 
                 <!-- UPLOAD PHOTO-->
-                <div class="d-flex flex-column justify-center gap-2">
+                <div v-if="mode !== 'view'" class="d-flex flex-column justify-center gap-2">
                     <div class="d-flex flex-wrap">
                         <v-btn color="primary" @click="refInputEl?.click()" prepend-icon="bx-upload">
                             <v-icon icon="bx-cloud-upload" class="d-sm-none" />
@@ -39,7 +39,7 @@
             <v-col md="4" cols="12">
                 <v-text-field v-model="form.first_name" :error-messages="errors.first_name">
                     <template #label>
-                        First Name <span class="text-error">*</span>
+                        First Name <span v-if="mode !== 'view'" class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
@@ -49,28 +49,28 @@
             <v-col md="4" cols="12">
                 <v-text-field v-model="form.last_name" :error-messages="errors.last_name">
                     <template #label>
-                        Last Name <span class="text-error">*</span>
+                        Last Name <span v-if="mode !== 'view'" class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
                 <v-text-field v-model="form.employee_id" :error-messages="errors.employee_id">
                     <template #label>
-                        Employee ID <span class="text-error">*</span>
+                        Employee ID <span v-if="mode !== 'view'" class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
-            <v-col md="4" cols="12">
+            <v-col v-if="mode !== 'view'" md="4" cols="12">
                 <v-text-field type="password" v-model="form.password" :error-messages="errors.password">
                     <template #label>
-                        Password <span class="text-error">*</span>
+                        Password <span v-if="mode !== 'view'" class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
             <v-col md="4" cols="12">
                 <v-text-field>
                     <template #label>
-                        Role <span class="text-error">*</span>
+                        Role <span v-if="mode !== 'view'" class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
@@ -86,7 +86,7 @@
             <v-col md="6" cols="12">
                 <v-text-field v-model="form.email" :error-messages="errors.email">
                     <template #label>
-                        Email Address <span class="text-error">*</span>
+                        Email Address <span v-if="mode !== 'view'" class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
@@ -94,7 +94,7 @@
                 <v-text-field v-model="form.contact_number" prefix="+63" maxlength="10"
                     :error-messages="errors.contact_number">
                     <template #label>
-                        Contact Number <span class="text-error">*</span>
+                        Contact Number <span v-if="mode !== 'view'" class="text-error">*</span>
                     </template>
                 </v-text-field>
             </v-col>
@@ -117,25 +117,39 @@
 
         <div class="d-flex justify-end ga-3 mt-4">
             <v-btn variant="tonal" color="grey" @click="$emit('cancel')">
-                Cancel
+                {{ mode === 'view' ? 'Back' : 'Cancel' }}
             </v-btn>
 
-            <v-btn type="submit" color="primary" prepend-icon="bx bx-check" :loading="loading">
-                Create User
+            <v-btn v-if="mode !== 'view'" type="submit" color="primary" prepend-icon="bx bx-check" :loading="loading">
+                {{ mode === 'edit' ? 'Update User' : 'Create User' }}
             </v-btn>
         </div>
     </v-form>
 </template>
 
 <script setup>
-import { useSnackbarStore } from '@/stores/snackbar';
 import { defineEmits, ref } from 'vue';
 
-const emit = defineEmits(['cancel']);
+const props = defineProps({
+    initialData: {
+        type: Object,
+        default: () => ({})
+    },
+    mode: {
+        type: String,
+        default: 'create'
+    },
+    loading: {
+        type: Boolean,
+        default: false
+    },
+    errors: {
+        type: Object,
+        default: () => ({})
+    }
+});
 
-const snackbar = useSnackbarStore();
-
-const loading = ref(false);
+const emit = defineEmits(['cancel', 'submit']);
 
 const form = ref({
     avatar: '',
@@ -154,7 +168,18 @@ const form = ref({
     zip: '',
 });
 
-const errors = ref({});
+watch(() => props.initialData, (newVal) => {
+    if (newVal) {
+        form.value = { ...newVal };
+
+        if (form.value.contact_number) {
+            // Remove +63 in contact
+            let num = String(form.value.contact_number).trim().slice(3);
+
+            form.value.contact_number = num;
+        }
+    }
+}, { immediate: true, deep: true });
 
 const refInputEl = ref();
 const avatarPreview = ref(null);
@@ -175,39 +200,19 @@ const changeAvatar = event => {
 }
 
 const handleSubmit = async () => {
-    loading.value = true;
-    errors.value = {};
+    const formData = new FormData();
 
-    try {
-        const formData = new FormData();
-
-        for (const key in form.value) {
-            if (form.value[key] !== null && form.value[key] !== '') {
-                formData.append(key, form.value[key]);
-            }
+    for (const key in form.value) {
+        if (form.value[key] !== null && form.value[key] !== '') {
+            formData.append(key, form.value[key]);
         }
-
-        await axios.post('/api/admin/users', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-        })
-
-        snackbar.triggerSnackbar('User successfully created!', 'success')
-
-    } catch (error) {
-        if (error.response?.status === 422) {
-            errors.value = error.response.data.errors || {};
-        } else {
-            console.error('An unexpected error occurred:', error);
-
-            const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
-            snackbar.triggerSnackbar(errorMessage, 'error');
-        }
-
-    } finally {
-        loading.value = false;
     }
+
+    if (props.mode === 'edit') {
+        formData.append('_method', 'PUT');
+    }
+
+    emit('submit', formData);
 }
 </script>
 <style></style>
