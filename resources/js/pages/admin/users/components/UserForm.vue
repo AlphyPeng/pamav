@@ -172,11 +172,16 @@ watch(() => props.initialData, (newVal) => {
     if (newVal) {
         form.value = { ...newVal };
 
+        // Remove +63 in contact
         if (form.value.contact_number) {
-            // Remove +63 in contact
             let num = String(form.value.contact_number).trim().slice(3);
 
             form.value.contact_number = num;
+        }
+
+        // Display avatar 
+        if (newVal.avatar) {
+            avatarPreview.value = `/storage/${newVal.avatar}`;
         }
     }
 }, { immediate: true, deep: true });

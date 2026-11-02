@@ -31,6 +31,7 @@ const router = useRouter();
 const userId = route.params.id;
 
 const user = ref({});
+const loading = ref(false);
 
 const goBack = () => {
     router.push({ name: "users.index" });

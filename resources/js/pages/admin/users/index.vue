@@ -24,7 +24,7 @@
             <v-divider class="mb-4" />
 
             <!-- TABLE -->
-            <UserTable :users="users" :loading="loading" @fetch-users="fetchUsers" />
+            <UserTable :users="users" :loading="loading" @fetch-users="fetchUsers" @delete-user="handleDelete" />
 
             <!-- PAGINATION -->
             <div class="d-flex justify-end mt-4">
@@ -136,6 +136,25 @@ const debouncedGetUsers = debounce(() => {
     fetchUsers();
 }, 500);
 
+const handleDelete = async (user) => {
+    loading.value = true;
+
+    try {
+        await axios.delete(`/api/admin/users/${user.id}`)
+        fetchUsers();
+
+        snackbar.triggerSnackbar('User successfully deleted!', 'success');
+
+    } catch (error) {
+        console.error('An unexpected error occurred:', error);
+
+        const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+        snackbar.triggerSnackbar(errorMessage, 'error');
+
+    } finally {
+        loading.value = false;
+    }
+}
 /*
 |--------------------------------------------------------------------------
 | Watchers

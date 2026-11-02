@@ -41,16 +41,13 @@
 
         <ConfirmDialog v-model="isDeleteDialogOpen" title="User Delete"
             :message="`Are you sure you want to delete this user <b>${selectedUser?.employee_id}</b>?`"
-            confirm-text="Delete" color="error" icon="bx-trash" :loading="isDeleting" @confirm="handleDelete" />
+            confirm-text="Delete" color="error" icon="bx-trash" :loading="loading" @confirm="handleConfirmDelete" />
     </div>
 </template>
 
 <script setup>
 import ConfirmDialog from '@/components/common/dialogs/ConfirmDialog.vue';
-import { useSnackbarStore } from '@/stores/snackbar';
 import { useRouter } from 'vue-router';
-
-const snackbar = useSnackbarStore();
 
 const router = useRouter();
 
@@ -66,11 +63,10 @@ const props = defineProps({
     },
 })
 
-const emit = defineEmits(['fetch-users']);
+const emit = defineEmits(['fetch-users', 'delete-user']);
 
 const isDeleteDialogOpen = ref(false);
 const selectedUser = ref(null);
-const isDeleting = ref(false);
 
 const headers = [
     {
@@ -173,29 +169,10 @@ const openDeleteDialog = (user) => {
     isDeleteDialogOpen.value = true;
 };
 
-const handleDelete = async () => {
-    isDeleting.value = true;
-
-    try {
-        await axios.delete(`/api/admin/users/${selectedUser.value.id}`)
-
-        selectedUser.value = null;
-        isDeleteDialogOpen.value = false;
-
-        // Fetch latest data
-        emit('fetch-users');
-        snackbar.triggerSnackbar('User successfully deleted!', 'success');
-
-    } catch (error) {
-        console.error('An unexpected error occurred:', error);
-
-        const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
-        snackbar.triggerSnackbar(errorMessage, 'error');
-
-    } finally {
-        isDeleting.value = false;
-    }
-}
+const handleConfirmDelete = () => {
+    emit('delete-user', selectedUser.value);
+    isDeleteDialogOpen.value = false;
+};
 </script>
 
 <style></style>
