@@ -37,7 +37,6 @@
 
 <script setup>
 import dayjs from 'dayjs';
-import { defineProps, } from 'vue';
 
 defineProps({
     permissions: {
