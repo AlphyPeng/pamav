@@ -87,11 +87,9 @@
 <script setup>
 import { useRouter } from "vue-router";
 
-import { useAuthStore } from "@/stores/auth";
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
 import logo from '@images/logo.svg?raw';
 
-const authStore = useAuthStore();
 const router = useRouter();
 
 const loading = ref(false);
@@ -113,8 +111,6 @@ const login = async () => {
       employee_id: form.value.employeeId,
       password: form.value.password,
     });
-
-    await authStore.fetchUser();
 
     router.push("/dashboard");
 

@@ -12,9 +12,12 @@ export const useAuthStore = defineStore("auth", () => {
       const { data } = await axios.get("/api/profile");
 
       user.value = data.user;
+
+      console.log(user.value);
       //   roles.value = data.roles;
       //   permissions.value = data.permissions;
     } catch (e) {
+      console.log(e);
       user.value = null;
       roles.value = [];
       permissions.value = [];
