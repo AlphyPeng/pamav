@@ -107,7 +107,7 @@ const login = async () => {
   try {
     await axios.get("/sanctum/csrf-cookie");
 
-    const response = await axios.post("/login", {
+    const response = await axios.post("/api/login", {
       employee_id: form.value.employeeId,
       password: form.value.password,
     });
