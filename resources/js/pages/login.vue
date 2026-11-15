@@ -114,10 +114,17 @@ const login = async () => {
       password: form.value.password,
     });
 
-    await authStore.fetchUser();
-    router.push("/dashboard");
+    // await authStore.fetchUser();
+    // router.push("/dashboard");
 
+    // console.log("Login successful:", response.data);
     console.log("Login successful:", response.data);
+
+    if (authStore && typeof authStore.fetchUser === 'function') {
+      await authStore.fetchUser();
+    }
+
+    router.push("/dashboard");
 
   } catch (error) {
     console.error("Login failed:", error);
