@@ -14,8 +14,6 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = data.user;
 
       console.log(user.value);
-      //   roles.value = data.roles;
-      //   permissions.value = data.permissions;
     } catch (e) {
       console.log(e);
       user.value = null;
