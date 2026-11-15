@@ -8,14 +8,15 @@
   <title>Sneat - Vuetify Vuejs Admin Template</title>
   <link rel="stylesheet" type="text/css" href="{{ asset('loader.css') }}" />
   @vite(['resources/js/main.js'])
+  <meta name="referrer" content="strict-origin-when-cross-origin">
 </head>
 
 <body>
   <div id="app">
     <div id="loading-bg">
       <div class="loading-logo">
-         <!-- SVG Logo -->
-         <svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- SVG Logo -->
+        <svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="100" height="80" />
           <mask id="mask0_78_100113" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="27" y="10" width="35"
             height="63">
@@ -56,7 +57,7 @@
       </div>
     </div>
   </div>
-  
+
   <script>
     const loaderColor = localStorage.getItem('sneat-initial-loader-bg') || '#FFFFFF'
     const primaryColor = localStorage.getItem('sneat-initial-loader-color') || '#696CFF'
