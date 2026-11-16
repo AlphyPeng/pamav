@@ -95,12 +95,12 @@ export const routes = [
       {
         path: "login",
         component: () => import("@/pages/login.vue"),
-        meta: { requiresGuest: true },
+        meta: { guestOnly: true },
       },
       {
         path: "register",
         component: () => import("@/pages/register.vue"),
-        meta: { requiresGuest: true },
+        meta: { guestOnly: true },
       },
       {
         path: "/:pathMatch(.*)*",

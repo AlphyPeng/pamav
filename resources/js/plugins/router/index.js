@@ -11,7 +11,7 @@ router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore();
 
   // only fetch once if not loaded yet
-  if (auth.user === null && to.path !== "/login") {
+  if (auth.user === null) {
     await auth.fetchUser();
   }
 
