@@ -152,7 +152,7 @@ const props = defineProps({
 const emit = defineEmits(['cancel', 'submit']);
 
 const form = ref({
-    avatar: '',
+    avatar: null,
     first_name: '',
     middle_name: '',
     last_name: '',
@@ -202,7 +202,7 @@ const changeAvatar = event => {
             }
         }
     }
-}
+};
 
 const handleSubmit = async () => {
     const formData = new FormData();
@@ -214,10 +214,26 @@ const handleSubmit = async () => {
     }
 
     if (props.mode === 'edit') {
-        formData.append('_method', 'PUT');
+        formData.append('_method', 'PATCH');
     }
 
     emit('submit', formData);
-}
+};
+
+const resetForm = () => {
+    Object.keys(form.value).forEach(key => {
+        form.value[key] = '';
+    });
+    form.value.avatar = null;
+
+    avatarPreview.value = null;
+
+    if (refInputEl.value) {
+        refInputEl.value.value = '';
+    }
+};
+
+defineExpose({ resetForm });
+
 </script>
 <style></style>

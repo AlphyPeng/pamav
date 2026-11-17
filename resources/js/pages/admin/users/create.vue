@@ -14,7 +14,8 @@
 
             <v-divider class="my-4" />
 
-            <UserForm mode="create" :loading="loading" :errors="errors" @submit="handleCreate" @cancel="goBack" />
+            <UserForm ref="userFormRef" mode="create" :loading="loading" :errors="errors" @submit="handleCreate"
+                @cancel="goBack" />
         </v-card>
     </v-container>
 </template>
@@ -34,16 +35,22 @@ const goBack = () => {
 
 const snackbar = useSnackbarStore();
 
+const userFormRef = ref(null);
+
 const handleCreate = async (formData) => {
     loading.value = true;
     errors.value = {};
 
     try {
-        await axios.post('/api/admin/users', formData, {
+        const response = await axios.post('/api/admin/users', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
 
-        // router.push({ name: 'users.index' });
+        snackbar.triggerSnackbar(response.data.message, 'success');
+
+        // Clear the form
+        userFormRef.value?.resetForm();
+
     } catch (error) {
         if (error.response?.status === 422) {
             errors.value = error.response.data.errors || {};

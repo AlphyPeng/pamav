@@ -14,7 +14,7 @@
 
             <v-divider class="my-4" />
 
-            <UserForm mode="edit" :initial-data="user" @submit="handleUpdate" @cancel="goBack" />
+            <UserForm mode="edit" :loading="loading" :initial-data="user" @submit="handleUpdate" @cancel="goBack" />
         </v-card>
     </v-container>
 </template>
@@ -32,6 +32,7 @@ const userId = route.params.id;
 
 const user = ref({});
 const loading = ref(false);
+const errors = ref({});
 
 const goBack = () => {
     router.push({ name: "users.index" });
@@ -51,10 +52,37 @@ const fetchUser = async () => {
     } finally {
         loading.value = false
     }
-}
+};
 
 onMounted(() => {
     fetchUser();
-})
+});
+
+const handleUpdate = async (formData) => {
+    loading.value = true;
+    errors.value = {};
+
+    try {
+        const response = await axios.post(`/api/admin/users/${userId}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        snackbar.triggerSnackbar(response.data.message, 'success');
+        fetchUser();
+
+    } catch (error) {
+        if (error.response?.status === 422) {
+            errors.value = error.response.data.errors || {};
+        } else {
+            console.error('An unexpected error occurred:', error);
+
+            const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+            snackbar.triggerSnackbar(errorMessage, 'error');
+        }
+
+    } finally {
+        loading.value = false
+    }
+}
 </script>
 <style></style>

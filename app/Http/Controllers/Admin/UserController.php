@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Services\Admin\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -50,14 +51,21 @@ class UserController extends Controller
         ]);
     }
 
-    public function edit(string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
-    }
+        try {
+            $this->userService->updateUser($user, $request->validated());
 
-    public function update(Request $request, string $id)
-    {
-        //
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'User updated successfully.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Failed to update user: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy(User $user)
@@ -68,7 +76,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'User deleted successfully.'
-            ]);
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
