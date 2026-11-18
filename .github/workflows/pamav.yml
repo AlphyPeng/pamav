@@ -6,14 +6,13 @@ on:
   pull_request:
     branches: [main]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   ci:
     name: CI (PHP + Frontend)
     runs-on: ubuntu-latest
+    concurrency:
+      group: ci-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout
@@ -64,3 +63,41 @@ jobs:
 
       - name: Run backend tests
         run: php artisan test
+
+  # ---------- CD: auto pull + build sa Ubuntu server ----------
+  deploy:
+    name: Deploy to Ubuntu server
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: false # hintayin ang tumatakbong deploy, huwag i-cancel sa gitna
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          fingerprint: ${{ secrets.SERVER_FINGERPRINT }}
+          script_stop: true
+          script: |
+            set -e
+            cd ${{ secrets.SERVER_APP_PATH || '/var/www/pamav' }}
+
+            git fetch --all --prune
+            git pull --ff-only origin main
+
+            composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+            npm ci
+            npm run build
+
+            php artisan migrate --force
+            php artisan storage:link || true
+            php artisan optimize:clear
+            php artisan optimize
+
+            sudo systemctl reload php8.3-fpm nginx
