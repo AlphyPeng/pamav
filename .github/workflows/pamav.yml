@@ -23,7 +23,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2' # matches composer.json (^8.2)
+          php-version: '8.3' # matches composer.json (^8.3)
           extensions: mbstring, xml, ctype, json, tokenizer, bcmath, curl, pdo_sqlite, sqlite3, dom, fileinfo
           coverage: none
           tools: composer:v2
