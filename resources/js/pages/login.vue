@@ -12,7 +12,7 @@
             <!-- eslint-disable vue/no-v-html -->
             <div class="d-flex" v-html="logo" />
             <h1 class="app-logo-title">
-              sneataw
+              sneat
             </h1>
           </RouterLink>
         </VCardItem>
