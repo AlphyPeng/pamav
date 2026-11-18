@@ -22,7 +22,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3' # matches composer.json (^8.3)
+          php-version: '8.3'
           extensions: mbstring, xml, ctype, json, tokenizer, bcmath, curl, pdo_sqlite, sqlite3, dom, fileinfo
           coverage: none
           tools: composer:v2
@@ -52,7 +52,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*' # matches .nvmrc
+          node-version: '22.19.0'
           cache: 'npm'
 
       - name: Install Node dependencies
@@ -73,7 +73,7 @@ jobs:
     timeout-minutes: 10
     concurrency:
       group: deploy-${{ github.ref }}
-      cancel-in-progress: false # hintayin ang tumatakbong deploy, huwag i-cancel sa gitna
+      cancel-in-progress: false
 
     steps:
       - name: Deploy via SSH
@@ -82,10 +82,12 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          timeout: 30s
           script_stop: true
           script: |
             set -e
-            cd ${{ secrets.SERVER_APP_PATH || '/var/www/pamav' }}
+            cd /var/www/pamav
 
             git fetch --all --prune
             git pull --ff-only origin main
