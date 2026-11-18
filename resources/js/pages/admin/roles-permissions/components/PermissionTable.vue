@@ -1,6 +1,16 @@
 <template>
     <div>
-        <v-data-table :headers="headers" :items="permissions" :loading="loading" hover hide-default-footer>
+        <!-- FILTER -->
+        <v-row class="my-2">
+            <v-col cols="12" md="4">
+                <v-text-field v-model="search" label="Search Permission Name" clearable
+                    prepend-inner-icon="bx-search" />
+            </v-col>
+        </v-row>
+
+        <!-- TABLE -->
+        <v-data-table :headers="headers" :items="permissions" :search="search" :filter-keys="['name']"
+            :loading="loading" hover hide-default-footer>
             <!-- CREATED AT -->
             <template #item.created_at="{ item }">
                 {{ formatDate(item.created_at) }}
@@ -48,7 +58,9 @@ defineProps({
         type: Boolean,
         default: false,
     },
-})
+});
+
+const search = ref('');
 
 const headers = [
     {
