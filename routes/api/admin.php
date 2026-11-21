@@ -23,4 +23,5 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     */
     Route::get('/permissions', [PermissionController::class, 'index']);
     Route::post('/permissions', [PermissionController::class, 'store']);
+    Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy']);
 });

@@ -27,4 +27,11 @@ class PermissionService
             return $permission;
         });
     }
+
+    public function deletePermission(Permission $permission): bool
+    {
+        return DB::transaction(function () use ($permission) {
+            return $permission->delete();
+        });
+    }
 }

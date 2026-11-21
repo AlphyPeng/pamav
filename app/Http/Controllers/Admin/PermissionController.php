@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePermissionRequest;
 use App\Services\Admin\PermissionService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Spatie\Permission\Models\Permission;
+
 use Exception;
 
 class PermissionController extends Controller
@@ -35,6 +36,23 @@ class PermissionController extends Controller
                 'status'  => 'error',
                 'message' => 'Failed to create permission.',
                 'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroy(Permission $permission)
+    {
+        try {
+            $this->permissionService->deletePermission($permission);
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Permission deleted successfully.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Failed to delete permission: ' . $e->getMessage()
             ], 500);
         }
     }

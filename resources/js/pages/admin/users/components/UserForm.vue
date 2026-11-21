@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="handleSubmit">
+    <v-form @submit.prevent="openCreateDialog">
         <v-row>
             <v-col cols="12" class="d-flex">
                 <!-- IMAGE PREVIEW -->
@@ -125,9 +125,13 @@
             </v-btn>
         </div>
     </v-form>
+
+    <ConfirmDialog v-model="isCreateDialogOpen" title="Create User" message="Are you sure you want to create this user?"
+        confirm-text="Submit" color="primary" icon="bx-check" :loading="loading" @confirm="handleSubmit" />
 </template>
 
 <script setup>
+import ConfirmDialog from '@/components/common/dialogs/ConfirmDialog.vue';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -150,6 +154,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['cancel', 'submit']);
+
+const isCreateDialogOpen = ref(false);
 
 const form = ref({
     avatar: null,
@@ -204,6 +210,10 @@ const changeAvatar = event => {
     }
 };
 
+const openCreateDialog = () => {
+    isCreateDialogOpen.value = true;
+};
+
 const handleSubmit = async () => {
     const formData = new FormData();
 
@@ -218,6 +228,7 @@ const handleSubmit = async () => {
     }
 
     emit('submit', formData);
+    isCreateDialogOpen.value = false;
 };
 
 const resetForm = () => {

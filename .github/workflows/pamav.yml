@@ -1,105 +1,105 @@
-name: pamav
+  name: pamav
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  on:
+    push:
+      branches: [main]
+    pull_request:
+      branches: [main]
 
-jobs:
-  ci:
-    name: CI (PHP + Frontend)
-    runs-on: ubuntu-latest
-    concurrency:
-      group: ci-${{ github.ref }}
-      cancel-in-progress: true
+  jobs:
+    ci:
+      name: CI (PHP + Frontend)
+      runs-on: ubuntu-latest
+      concurrency:
+        group: ci-${{ github.ref }}
+        cancel-in-progress: true
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
 
-      # ---------- PHP / backend ----------
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: mbstring, xml, ctype, json, tokenizer, bcmath, curl, pdo_sqlite, sqlite3, dom, fileinfo
-          coverage: none
-          tools: composer:v2
+        # ---------- PHP / backend ----------
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '8.3'
+            extensions: mbstring, xml, ctype, json, tokenizer, bcmath, curl, pdo_sqlite, sqlite3, dom, fileinfo
+            coverage: none
+            tools: composer:v2
 
-      - name: Get Composer cache dir
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+        - name: Get Composer cache dir
+          id: composer-cache
+          run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
 
-      - name: Cache Composer
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+        - name: Cache Composer
+          uses: actions/cache@v4
+          with:
+            path: ${{ steps.composer-cache.outputs.dir }}
+            key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+            restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install PHP dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        - name: Install PHP dependencies
+          run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Prepare Laravel environment
-        run: |
-          cp .env.example .env
-          php artisan key:generate
-          mkdir -p database
-          touch database/database.sqlite
+        - name: Prepare Laravel environment
+          run: |
+            cp .env.example .env
+            php artisan key:generate
+            mkdir -p database
+            touch database/database.sqlite
 
-      # ---------- Node / frontend ----------
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.19.0'
-          cache: 'npm'
+        # ---------- Node / frontend ----------
+        - name: Setup Node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22.19.0'
+            cache: 'npm'
 
-      - name: Install Node dependencies
-        run: npm ci
+        - name: Install Node dependencies
+          run: npm ci
 
-      - name: Build frontend assets
-        run: npm run build
+        - name: Build frontend assets
+          run: npm run build
 
-      - name: Run backend tests
-        run: php artisan test
+        - name: Run backend tests
+          run: php artisan test
 
-  # ---------- CD: auto pull + build sa Ubuntu server (self-hosted runner) ----------
-  deploy:
-    name: Deploy to Ubuntu server
-    needs: ci
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: self-hosted
-    timeout-minutes: 15
-    concurrency:
-      group: deploy-${{ github.ref }}
-      cancel-in-progress: false
+    # ---------- CD: auto pull + build sa Ubuntu server (self-hosted runner) ----------
+    deploy:
+      name: Deploy to Ubuntu server
+      needs: ci
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      runs-on: self-hosted
+      timeout-minutes: 15
+      concurrency:
+        group: deploy-${{ github.ref }}
+        cancel-in-progress: false
 
-    steps:
-      - name: Deploy
-        run: |
-          set -e
-          git config --global --add safe.directory /var/www/pamav
-          cd /var/www/pamav
+      steps:
+        - name: Deploy
+          run: |
+            set -e
+            git config --global --add safe.directory /var/www/pamav
+            cd /var/www/pamav
 
-          git fetch --all --prune
-          git checkout main
-          git pull --ff-only origin main
+            git fetch --all --prune
+            git checkout main
+            git pull --ff-only origin main
 
-          composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
-          npm ci
-          npm run build
+            composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+            npm ci
+            npm run build
 
-          php artisan migrate --force
-          php artisan storage:link || true
-          php artisan optimize:clear
-          php artisan optimize
+            php artisan migrate --force
+            php artisan storage:link || true
+            php artisan optimize:clear
+            php artisan optimize
 
-          if systemctl cat php8.3-fpm >/dev/null 2>&1; then
-            sudo systemctl reload php8.3-fpm
-          elif systemctl cat php8.2-fpm >/dev/null 2>&1; then
-            sudo systemctl reload php8.2-fpm
-          elif systemctl cat php-fpm >/dev/null 2>&1; then
-            sudo systemctl reload php-fpm
-          fi
-          sudo systemctl reload nginx
+            if systemctl cat php8.3-fpm >/dev/null 2>&1; then
+              sudo systemctl reload php8.3-fpm
+            elif systemctl cat php8.2-fpm >/dev/null 2>&1; then
+              sudo systemctl reload php8.2-fpm
+            elif systemctl cat php-fpm >/dev/null 2>&1; then
+              sudo systemctl reload php-fpm
+            fi
+            sudo systemctl reload nginx

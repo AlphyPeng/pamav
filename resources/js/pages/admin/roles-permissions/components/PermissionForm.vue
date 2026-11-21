@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="handleSubmit">
+    <v-form @submit.prevent="openCreateDialog">
         <v-row>
             <!-- PERMISSION NAME -->
             <v-col cols="12">
@@ -17,38 +17,50 @@
             </v-btn>
         </div>
     </v-form>
+
+    <ConfirmDialog v-model="isCreateDialogOpen" title="Create Permission"
+        message="Are you sure you want to create this permission?" confirm-text="Submit" color="primary" icon="bx-check"
+        :loading="loading" @confirm="handleSubmit" />
 </template>
 
 <script setup>
+import ConfirmDialog from '@/components/common/dialogs/ConfirmDialog.vue';
 import { defineEmits, reactive } from 'vue';
 
-const emit = defineEmits(['cancel']);
+const props = defineProps({
+    loading: {
+        type: Boolean,
+        default: false
+    },
+    errors: {
+        type: Object,
+        default: () => ({})
+    }
+});
 
-const loading = ref(false);
+const emit = defineEmits(['cancel', 'submit']);
+
+const isCreateDialogOpen = ref(false);
 
 const form = reactive({
     name: '',
     guard_name: 'web'
 })
 
-const errors = reactive({
-    name: []
-});
+const openCreateDialog = () => {
+    isCreateDialogOpen.value = true;
+};
 
 const handleSubmit = async () => {
-    loading.value = true;
-    errors.name = [];
+    emit('submit', form);
+    isCreateDialogOpen.value = false;
+};
 
-    try {
-        await axios.post('/api/admin/permissions', form)
+const resetForm = () => {
+    form.name = '';
+};
 
-    } catch (error) {
-        if (error.response?.status === 422) {
-            errors.name = error.response.data.errors.name || [];
-        }
-    } finally {
-        loading.value = false;
-    }
-}
+defineExpose({ resetForm });
+
 </script>
 <style></style>

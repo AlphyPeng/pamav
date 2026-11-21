@@ -35,7 +35,7 @@
                 </v-window-item>
 
                 <v-window-item value="permissions">
-                    <PermissionTable :permissions="permissions" :loading="loading" />
+                    <PermissionTable :permissions="permissions" :loading="loading" @delete-permission="handleDelete" />
                 </v-window-item>
             </v-window>
         </v-card>
@@ -43,10 +43,13 @@
 </template>
 
 <script setup>
+import { useSnackbarStore } from '@/stores/snackbar';
 import { useRoute, useRouter } from "vue-router";
 
 import PermissionTable from "./components/PermissionTable.vue";
 import RoleTable from "./components/RoleTable.vue";
+
+const snackbar = useSnackbarStore();
 
 /*
 |--------------------------------------------------------------------------
@@ -104,12 +107,13 @@ const buttonConfig = computed(() => {
 |--------------------------------------------------------------------------
 */
 
+// Create 
 const handleCreate = (value) => {
     if (value === 'roles') {
         router.push({
             name: "roles.create",
         });
-    } else {
+    } else { // permissions
         router.push({
             name: "permissions.create",
         });
@@ -118,17 +122,46 @@ const handleCreate = (value) => {
 
 const fetchData = async () => {
     loading.value = true;
+
     try {
         if (activeTab.value === 'roles') {
             const response = await axios.get('api/admin/permissions');
             roles.value = response.data;
-        } else {
+        } else { // permissions
             const response = await axios.get('/api/admin/permissions');
             permissions.value = response.data;
         }
 
     } catch (error) {
         console.error("Failed to load:", error);
+
+    } finally {
+        loading.value = false;
+    }
+}
+
+// Delete 
+const handleDelete = async (val) => {
+    console.log(activeTab.value)
+    loading.value = true;
+
+    try {
+        let response = null;
+
+        if (activeTab.value === 'roles') {
+            console.log("AW");
+        } else { // permissions 
+            response = await axios.delete(`/api/admin/permissions/${val.id}`)
+        }
+
+        fetchData();
+        snackbar.triggerSnackbar(response.data.message, 'success');
+
+    } catch (error) {
+        console.error('An unexpected error occurred:', error);
+
+        const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+        snackbar.triggerSnackbar(errorMessage, 'error');
 
     } finally {
         loading.value = false;

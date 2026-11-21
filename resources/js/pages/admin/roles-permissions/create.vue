@@ -16,46 +16,68 @@
 
             <!-- FORM -->
             <RoleForm v-if="isRole" @cancel="goBack" />
-            <PermissionForm v-else @cancel="goBack" />
+            <PermissionForm v-else ref="formRef" :loading="loading" :errors="errors" @submit="handleCreate"
+                @cancel="goBack" />
         </v-card>
     </v-container>
 </template>
 
 <script setup>
+import { useSnackbarStore } from '@/stores/snackbar';
 import { useRoute, useRouter } from 'vue-router';
 
 import PermissionForm from './components/PermissionForm.vue';
 import RoleForm from './components/RoleForm.vue';
-/*
-|--------------------------------------------------------------------------
-| Router
-|--------------------------------------------------------------------------
-*/
 
 const route = useRoute();
 const router = useRouter();
 
-/*
-|--------------------------------------------------------------------------
-| Computed
-|--------------------------------------------------------------------------
-*/
+const loading = ref(false);
+const errors = ref({});
+const formRef = ref(null);
 
 const isRole = computed(() => route.name === 'roles.create');
 const titleText = computed(() => (isRole.value ? 'Role' : 'Permission'));
-
-/*
-|--------------------------------------------------------------------------
-| Methods
-|--------------------------------------------------------------------------
-*/
 
 const goBack = () => {
     const tabQuery = isRole.value ? 'roles' : 'permissions';
     router.push({ name: "roles-permissions.index", query: { tab: tabQuery } });
 };
 
+const snackbar = useSnackbarStore();
 
+const handleCreate = async (formData) => {
+    loading.value = true;
+    errors.value = {};
+
+    try {
+        let response = null;
+
+        if (titleText === 'Role') {
+            console.log("AW");
+        } else { // permissions 
+            response = await axios.post('/api/admin/permissions', formData);
+        }
+
+        snackbar.triggerSnackbar(response.data.message, 'success');
+
+        // Clear the form
+        formRef.value?.resetForm();
+
+    } catch (error) {
+        if (error.response?.status === 422) {
+            errors.value = error.response.data.errors || {};
+        } else {
+            console.error('An unexpected error occurred:', error);
+
+            const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+            snackbar.triggerSnackbar(errorMessage, 'error');
+        }
+
+    } finally {
+        loading.value = false;
+    }
+}
 
 </script>
 

@@ -74,12 +74,12 @@ class UserController extends Controller
             $this->userService->deleteUser($user);
 
             return response()->json([
-                'status' => 'success',
+                'status'  => 'success',
                 'message' => 'User deleted successfully.'
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Failed to delete user: ' . $e->getMessage()
             ], 500);
         }
