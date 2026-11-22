@@ -106,22 +106,6 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
     to: '/account-settings',
   }" />
 
-  <VerticalNavLink :item="{
-    title: 'Login',
-    icon: 'bx-log-in',
-    to: '/login',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Register',
-    icon: 'bx-user-plus',
-    to: '/register',
-  }" />
-  <VerticalNavLink :item="{
-    title: 'Error',
-    icon: 'bx-info-circle',
-    to: '/no-existence',
-  }" />
-
   <!-- 👉 User Interface -->
   <VerticalNavSectionTitle :item="{
     heading: 'User Interface',
