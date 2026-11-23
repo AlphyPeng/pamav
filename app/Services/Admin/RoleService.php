@@ -3,12 +3,11 @@
 namespace App\Services\Admin;
 
 use Spatie\Permission\Models\Role;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class RoleService
 {
-    public function getPaginatedRoles(array $filters, int $perPage)
+    public function getRoles()
     {
         return Role::all();
     }
@@ -22,6 +21,13 @@ class RoleService
             ]);
 
             return $role;
+        });
+    }
+
+    public function deleteRole(Role $role): bool
+    {
+        return DB::transaction(function () use ($role) {
+            return $role->delete();
         });
     }
 }

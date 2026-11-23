@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\StorePermissionRequest;
 use App\Services\Admin\PermissionService;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Permission;
-
 use Exception;
 
 class PermissionController extends Controller
@@ -16,7 +15,7 @@ class PermissionController extends Controller
 
     public function index(): JsonResponse
     {
-        $permissions = $this->permissionService->getPaginatedPermissions();
+        $permissions = $this->permissionService->getPermissions();
 
         return response()->json($permissions);
     }

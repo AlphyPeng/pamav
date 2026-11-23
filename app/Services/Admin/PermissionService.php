@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class PermissionService
 {
-    public function getPaginatedPermissions()
+    public function getPermissions()
     {
         return Permission::all();
     }

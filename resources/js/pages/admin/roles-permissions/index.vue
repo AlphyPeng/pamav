@@ -31,7 +31,7 @@
             <!-- TAB CONTENT -->
             <v-window v-model="activeTab">
                 <v-window-item value="roles">
-                    <RoleTable />
+                    <RoleTable :roles="roles" :loading="loading" @delete-role="handleDelete" />
                 </v-window-item>
 
                 <v-window-item value="permissions">
@@ -125,7 +125,7 @@ const fetchData = async () => {
 
     try {
         if (activeTab.value === 'roles') {
-            const response = await axios.get('api/admin/permissions');
+            const response = await axios.get('api/admin/roles');
             roles.value = response.data;
         } else { // permissions
             const response = await axios.get('/api/admin/permissions');
@@ -142,14 +142,13 @@ const fetchData = async () => {
 
 // Delete 
 const handleDelete = async (val) => {
-    console.log(activeTab.value)
     loading.value = true;
 
     try {
         let response = null;
 
         if (activeTab.value === 'roles') {
-            console.log("AW");
+            response = await axios.delete(`/api/admin/roles/${val.id}`)
         } else { // permissions 
             response = await axios.delete(`/api/admin/permissions/${val.id}`)
         }

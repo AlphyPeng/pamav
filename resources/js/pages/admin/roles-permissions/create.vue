@@ -15,7 +15,8 @@
             <v-divider class="my-4" />
 
             <!-- FORM -->
-            <RoleForm v-if="isRole" @cancel="goBack" />
+            <RoleForm v-if="isRole" ref="formRef" :loading="loading" :errors="errors" @submit="handleCreate"
+                @cancel="goBack" />
             <PermissionForm v-else ref="formRef" :loading="loading" :errors="errors" @submit="handleCreate"
                 @cancel="goBack" />
         </v-card>
@@ -53,8 +54,8 @@ const handleCreate = async (formData) => {
     try {
         let response = null;
 
-        if (titleText === 'Role') {
-            console.log("AW");
+        if (titleText.value === 'Role') {
+            response = await axios.post('/api/admin/roles', formData);
         } else { // permissions 
             response = await axios.post('/api/admin/permissions', formData);
         }

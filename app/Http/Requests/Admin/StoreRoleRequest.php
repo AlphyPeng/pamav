@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRoleRequest extends FormRequest
 {
@@ -22,7 +23,15 @@ class StoreRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('permissions', 'name')->where(function ($query) {
+                    return $query->where('guard_name', $this->input('guard_name', 'web'));
+                }),
+                'guard_name' => ['nullable', 'string', 'in:web,api'],
+            ]
         ];
     }
 }

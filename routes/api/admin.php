@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,15 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/users', [UserController::class, 'store']);
     Route::patch('/users/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Role
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::post('/roles', [RoleController::class, 'store']);
+    Route::delete('/roles/{role}', [RoleController::class, 'destroy']);
 
     /*
     |--------------------------------------------------------------------------

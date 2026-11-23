@@ -49,7 +49,7 @@
         </div>
 
         <ConfirmDialog v-model="isDeleteDialogOpen" title="Permission Delete"
-            :message="`Are you sure you want to delete this user <b>${selectedPermission?.name}</b>?`"
+            :message="`Are you sure you want to delete this permission <b>${selectedPermission?.name}</b>?`"
             confirm-text="Delete" color="error" icon="bx-trash" :loading="loading" @confirm="handleConfirmDelete" />
     </div>
 </template>
