@@ -3,7 +3,15 @@
         <v-row>
             <!-- ROLE NAME -->
             <v-col cols="12">
-                <v-text-field v-model="form.name" label="Name" :error-messages="errors.name" />
+                <v-text-field v-model="form.name"
+                    @update:model-value="(val) => (form.name = (val).toLowerCase().replace(' ', '-'))" label="Name"
+                    :error-messages="errors.name" />
+            </v-col>
+
+            <v-col cols="12">
+                <v-autocomplete v-model="form.permissions" :items="props.permissions" item-title="name" item-value="id"
+                    label="Select Permission/s" chips closable-chips multiple clearable
+                    :error-messages="errors.permissions" />
             </v-col>
         </v-row>
 
@@ -27,6 +35,10 @@ import ConfirmDialog from '@/components/common/dialogs/ConfirmDialog.vue';
 import { defineEmits, reactive } from 'vue';
 
 const props = defineProps({
+    permissions: {
+        type: Array,
+        default: () => [],
+    },
     loading: {
         type: Boolean,
         default: false
@@ -43,6 +55,7 @@ const isCreateDialogOpen = ref(false);
 
 const form = reactive({
     name: '',
+    permissions: [],
     guard_name: 'web'
 })
 

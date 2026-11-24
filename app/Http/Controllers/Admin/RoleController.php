@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreRoleRequest;
 use App\Services\Admin\RoleService;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Exception;
 
 class RoleController extends Controller
@@ -18,6 +19,15 @@ class RoleController extends Controller
         $roles = $this->roleService->getRoles();
 
         return response()->json($roles);
+    }
+
+    public function permissions()
+    {
+        return response()->json(
+            Permission::select('id', 'name')
+                ->orderBy('name')
+                ->get()
+        );
     }
 
     public function store(StoreRoleRequest $request)

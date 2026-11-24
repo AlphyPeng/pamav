@@ -27,11 +27,13 @@ class StoreRoleRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('permissions', 'name')->where(function ($query) {
+                Rule::unique('roles', 'name')->where(function ($query) {
                     return $query->where('guard_name', $this->input('guard_name', 'web'));
                 }),
                 'guard_name' => ['nullable', 'string', 'in:web,api'],
-            ]
+            ],
+            'permissions' => ['required'],
+
         ];
     }
 }

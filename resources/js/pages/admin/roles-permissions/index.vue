@@ -125,7 +125,7 @@ const fetchData = async () => {
 
     try {
         if (activeTab.value === 'roles') {
-            const response = await axios.get('api/admin/roles');
+            const response = await axios.get('/api/admin/roles');
             roles.value = response.data;
         } else { // permissions
             const response = await axios.get('/api/admin/permissions');
@@ -133,7 +133,10 @@ const fetchData = async () => {
         }
 
     } catch (error) {
-        console.error("Failed to load:", error);
+        console.error("Failed to load users:", error);
+
+        const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+        snackbar.triggerSnackbar(errorMessage, 'error');
 
     } finally {
         loading.value = false;

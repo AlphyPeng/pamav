@@ -15,8 +15,8 @@
             <v-divider class="my-4" />
 
             <!-- FORM -->
-            <RoleForm v-if="isRole" ref="formRef" :loading="loading" :errors="errors" @submit="handleCreate"
-                @cancel="goBack" />
+            <RoleForm v-if="isRole" ref="formRef" :permissions="permissions" :loading="loading" :errors="errors"
+                @submit="handleCreate" @cancel="goBack" />
             <PermissionForm v-else ref="formRef" :loading="loading" :errors="errors" @submit="handleCreate"
                 @cancel="goBack" />
         </v-card>
@@ -27,6 +27,7 @@
 import { useSnackbarStore } from '@/stores/snackbar';
 import { useRoute, useRouter } from 'vue-router';
 
+import { onMounted } from 'vue';
 import PermissionForm from './components/PermissionForm.vue';
 import RoleForm from './components/RoleForm.vue';
 
@@ -36,6 +37,7 @@ const router = useRouter();
 const loading = ref(false);
 const errors = ref({});
 const formRef = ref(null);
+const permissions = ref([]);
 
 const isRole = computed(() => route.name === 'roles.create');
 const titleText = computed(() => (isRole.value ? 'Role' : 'Permission'));
@@ -47,6 +49,30 @@ const goBack = () => {
 
 const snackbar = useSnackbarStore();
 
+// Fetch the list of Permissions
+const fetchPermissions = async () => {
+    loading.value = true;
+
+    try {
+        const response = await axios.get('/api/admin/roles/permissions');
+        permissions.value = response.data;
+
+    } catch (error) {
+        console.error("Failed to load permissions:", error);
+
+        const errorMessage = error.response?.data?.message || 'An unexpected error occurred. Please try again.';
+        snackbar.triggerSnackbar(errorMessage, 'error');
+
+    } finally {
+        loading.value = false;
+    }
+}
+
+onMounted(() => {
+    fetchPermissions();
+});
+
+// Creation of Role 
 const handleCreate = async (formData) => {
     loading.value = true;
     errors.value = {};
