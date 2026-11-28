@@ -85,11 +85,11 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-
 import { useAuthStore } from '@/stores/auth';
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
 import logo from '@images/logo.svg?raw';
+import { ref } from 'vue';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -107,18 +107,14 @@ const login = async () => {
   loading.value = true;
 
   try {
-    await axios.get("/sanctum/csrf-cookie");
+    await axios.get('/sanctum/csrf-cookie');
 
-    const response = await axios.post("/api/login", {
+    await axios.post('/api/login', {
       employee_id: form.value.employeeId,
       password: form.value.password,
     });
 
-    // await authStore.fetchUser();
-    // router.push("/dashboard");
-
-    // console.log("Login successful:", response.data);
-    console.log("Login successful:", response.data);
+    console.log(authStore.fetchUser());
 
     if (authStore && typeof authStore.fetchUser === 'function') {
       await authStore.fetchUser();

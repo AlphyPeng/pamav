@@ -16,11 +16,11 @@ class RoleService
     public function createRole(array $data): Role
     {
         return DB::transaction(function () use ($data) {
-            $guardName = $data['guard_name'] ?? 'web';
+            $guardName = 'web';
 
             $role = Role::create([
                 'name'       => $data['name'],
-                'guard_name' => $data['guard_name'] ?? 'web',
+                'guard_name' => $guardName,
             ]);
 
             $permissions = Permission::whereIn('id', $data['permissions'])

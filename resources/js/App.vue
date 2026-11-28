@@ -13,6 +13,23 @@
 </template>
 
 <script setup>
+import { useAuthStore } from "@/stores/auth";
 import { useSnackbarStore } from '@/stores/snackbar';
+import { watch } from "vue";
+import { useTheme } from "vuetify";
+
 const snackbarStore = useSnackbarStore();
+
+// Get theme
+const auth = useAuthStore();
+const theme = useTheme();
+
+watch(
+  () => auth.user?.theme,
+  (newTheme) => {
+    if (newTheme) {
+      theme.global.name.value = newTheme;
+    }
+  },
+);
 </script>

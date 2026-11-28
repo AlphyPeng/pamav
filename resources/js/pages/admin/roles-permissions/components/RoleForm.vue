@@ -55,8 +55,7 @@ const isCreateDialogOpen = ref(false);
 
 const form = reactive({
     name: '',
-    permissions: [],
-    guard_name: 'web'
+    permissions: []
 })
 
 const openCreateDialog = () => {
@@ -70,6 +69,7 @@ const handleSubmit = async () => {
 
 const resetForm = () => {
     form.name = '';
+    form.permissions = [];
 };
 
 defineExpose({ resetForm });

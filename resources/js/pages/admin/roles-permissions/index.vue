@@ -44,6 +44,7 @@
 
 <script setup>
 import { useSnackbarStore } from '@/stores/snackbar';
+import { ref } from 'vue';
 import { useRoute, useRouter } from "vue-router";
 
 import PermissionTable from "./components/PermissionTable.vue";

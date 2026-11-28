@@ -25,9 +25,8 @@
 
 <script setup>
 import { useSnackbarStore } from '@/stores/snackbar';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
-import { onMounted } from 'vue';
 import PermissionForm from './components/PermissionForm.vue';
 import RoleForm from './components/RoleForm.vue';
 

@@ -116,11 +116,12 @@
         </v-row>
 
         <div class="d-flex justify-end ga-3 mt-4">
-            <v-btn variant="tonal" color="grey" @click="$emit('cancel')">
+            <v-btn variant="tonal" color="grey" @click="$emit('cancel')" :loading="loading" :disabled="loading">
                 {{ mode === 'view' ? 'Back' : 'Cancel' }}
             </v-btn>
 
-            <v-btn v-if="mode !== 'view'" type="submit" color="primary" prepend-icon="bx bx-check" :loading="loading">
+            <v-btn v-if="mode !== 'view'" type="submit" color="primary" prepend-icon="bx bx-check" :loading="loading"
+                :disabled="loading">
                 {{ mode === 'edit' ? 'Update User' : 'Create User' }}
             </v-btn>
         </div>

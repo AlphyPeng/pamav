@@ -21,13 +21,16 @@
             <template #item.actions="{ item }">
                 <div class="d-flex justify-center ga-1">
                     <!-- VIEW -->
-                    <v-btn icon="bx-show" size="small" variant="text" color="info" @click="viewUser(item)" />
+                    <v-btn icon="bx-show" size="small" variant="text" color="info" @click="viewUser(item)"
+                        :loading="loading" :disabled="loading" />
 
                     <!-- EDIT -->
-                    <v-btn icon="bx-edit" size="small" variant="text" color="primary" @click="editUser(item)" />
+                    <v-btn icon="bx-edit" size="small" variant="text" color="primary" @click="editUser(item)"
+                        :loading="loading" :disabled="loading" />
 
                     <!-- DELETE -->
-                    <v-btn icon="bx-trash" size="small" variant="text" color="error" @click="openDeleteDialog(item)" />
+                    <v-btn icon="bx-trash" size="small" variant="text" color="error" @click="openDeleteDialog(item)"
+                        :loading="loading" :disabled="loading" />
                 </div>
             </template>
 
@@ -47,8 +50,8 @@
 
 <script setup>
 import ConfirmDialog from '@/components/common/dialogs/ConfirmDialog.vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
 const router = useRouter();
 
 const props = defineProps({
